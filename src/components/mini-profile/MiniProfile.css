@@ -1,0 +1,38 @@
+.root {
+    border-radius: 0.8vh;
+    min-height: 13vh;
+
+    background: linear-gradient(90deg, rgba(20, 28, 34, 0.8) 0%, rgba(9, 15, 19, 0.8) 100%);
+}
+
+.vertical-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.horizontal-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar {
+    border: 2px solid #FFFFFF;
+    border-radius: 100%;
+
+    width: 9vh;
+    height: 9vh;
+}
+
+.user-info-container {
+    color: #D1D5D8;
+
+    font-family: Montserrat, serif;
+    font-style: normal;
+    font-weight: 500;
+}
