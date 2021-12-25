@@ -1,24 +1,11 @@
 import React from 'react';
-import MiniProfile from './components/mini-profile/MiniProfile';
+// import MiniProfile from './components/mini-profile/MiniProfile';
+import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 
 function App() {
     return (
         <div className="App">
-            <div style={{
-                justifyContent: "center",
-                display: "flex"
-            }}>
-                <MiniProfile
-                    firstName={"Имя"}
-                    lastName={"Фамилия"}
-                    email={"some_test_email@gmail.com"}
-                    location={"г. Томск"}
-                    isGuest={false}
-                    avatarLink={"https://react.semantic-ui.com/images/avatar/large/matthew.png"}
-                    nickname={"andrwnv"}
-                />
-            </div>
-
+            <RegistrationPage />
         </div>
     );
 }

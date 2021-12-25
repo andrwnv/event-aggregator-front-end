@@ -15,7 +15,7 @@ type MiniProfileInfo = {
 
 export default function MiniProfile(info: MiniProfileInfo) {
     return (
-        <div className={"root vertical-container"}>
+        <div className={"root-container-mini-profile vertical-container"}>
             <div
                 className={"vertical-container center-container"}
                 style={{width: "13vh"}}
@@ -28,7 +28,10 @@ export default function MiniProfile(info: MiniProfileInfo) {
                 style={{minWidth: "35vh"}}
             >
                 <div>
-                    <div style={{fontSize: "2.5vh"}}>
+                    <div
+                        style={{
+                            fontSize: "2.5vh",
+                        }}>
                         {info.lastName} {info.firstName} ({info.nickname})
                     </div>
                     <div style={{fontSize: "1.8vh"}}>
