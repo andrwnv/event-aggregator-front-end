@@ -1,0 +1,14 @@
+version: "3.7"
+
+services:
+  event_service_front:
+    container_name: event_service_front
+    build: ./event_service_front
+    volumes:
+      - './:/app'
+      - './:/app/node_modules'
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    command:
+      - npm start
