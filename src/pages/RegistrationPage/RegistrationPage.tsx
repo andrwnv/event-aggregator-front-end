@@ -76,7 +76,41 @@ export default function RegistrationPage() {
                             <div>Введите желаймый никнейм</div>
                         </div>
                     </div>
+                </div>
 
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row-reverse",
+                    marginBottom: "1vh"
+                }}>
+                    <button className={"reg-button-base"}
+                            style={{
+                                backgroundColor: "#141C22",
+                                color: "#D2D6D9"
+                            }}>
+                        Присоедениться
+                    </button>
+                    <button className={"reg-button-base"}
+                            style={{
+                                backgroundColor: "#D3D7DA",
+                                color: "#141C22"
+                            }}>
+                        Я передумал
+                    </button>
+                </div>
+                <div>
+                    Имеются вопросы?
+                    <button style={{
+                        background: "none",
+                        color: "inherit",
+                        border: "none",
+                        font: "inherit",
+                        cursor: "pointer",
+                        outline: "inherit",
+                        textDecoration: "underline"
+                    }}>
+                        Задайте их нам!
+                    </button>
                 </div>
             </div>
         </div>
