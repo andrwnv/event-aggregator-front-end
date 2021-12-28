@@ -31,9 +31,7 @@ export default function RegistrationPage() {
                         Ваш профиль будет выглять так
                     </div>
 
-                    <div style={{
-                        // display: 'flex',
-                    }} className={"default-bottom-margin"}>
+                    <div className={"default-bottom-margin"}>
                         <MiniProfile
                             firstName={firstName.length > 0 ? firstName : 'Имя'}
                             lastName={lastName.length > 0 ? lastName : 'Фамилия'}

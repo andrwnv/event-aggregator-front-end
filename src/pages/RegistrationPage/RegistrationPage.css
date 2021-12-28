@@ -2,7 +2,7 @@
     background-color: #141C22;
     min-height: 100vh;
 
-    background-image: url('./resources/background-figures.png');
+    background-image: url('../misc/resources/background-figures.png');
     background-size: cover;
 
     display: flex;
@@ -16,11 +16,8 @@
     background: linear-gradient(107.02deg, rgba(214, 217, 220, 0.65) 15.35%, rgba(117, 152, 179, 0.65) 100%);
     box-shadow: 0 4px 13px rgba(207, 211, 215, 0.1);
     backdrop-filter: blur(20px);
-
     border-radius: 21px;
-
     max-width: 76vw;
-
     padding: 6vh;
 }
 
