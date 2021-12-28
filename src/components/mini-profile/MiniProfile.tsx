@@ -18,7 +18,7 @@ export default function MiniProfile(info: MiniProfileInfo) {
         <div className={"root-container-mini-profile vertical-container"}>
             <div
                 className={"vertical-container center-container"}
-                style={{width: "13vh"}}
+                style={{marginRight: "2vh"}}
             >
                 <img className={"avatar"} src={info.avatarLink} alt={`${info.nickname} avatar`}/>
             </div>

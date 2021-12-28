@@ -3,6 +3,8 @@
     min-height: 13vh;
 
     background: linear-gradient(90deg, rgba(20, 28, 34, 0.8) 0%, rgba(9, 15, 19, 0.8) 100%);
+    padding-left: 2vh;
+    padding-right: 2vh;
 }
 
 .vertical-container {
