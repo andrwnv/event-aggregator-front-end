@@ -1,11 +1,13 @@
 import React from 'react';
-// import MiniProfile from './components/mini-profile/MiniProfile';
+
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
+import RegistrationConfirmPage from './pages/RegistrationPage/RegistrationConfirmPage/RegistrationConfirmPage';
 
 function App() {
     return (
         <div className="App">
-            <RegistrationPage />
+            {/*<RegistrationPage />*/}
+            <RegistrationConfirmPage />
         </div>
     );
 }
