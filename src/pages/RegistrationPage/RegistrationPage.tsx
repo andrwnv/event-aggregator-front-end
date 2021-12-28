@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import MiniProfile from '../../components/mini-profile/MiniProfile';
+import CustomInput from '../../components/custom-input/CustomInput';
 
 import '../../fonts.css';
 import './RegistrationPage.css';
-import MiniProfile from '../../components/mini-profile/MiniProfile';
-
 
 export default function RegistrationPage() {
+    const [firstName, updateFirstName] = useState('');
+    const [lastName, updateLastName] = useState('');
+    const [email, updateEmail] = useState('');
+    const [nickname, updateNickName] = useState('');
+    const [password, updatePassword] = useState('');
 
     return (
         <div className={"root-container-reg"}>
@@ -56,25 +62,72 @@ export default function RegistrationPage() {
                             flexWrap: "wrap"
                         }}
                     >
-                        <div className={"custom-input-container"}>
-                            <input type="text" placeholder="Имя" className={"custom-input"}/>
-                            <div>Минимум 2 символа</div>
-                        </div>
+                        <CustomInput
+                            key={1}
+                            value={firstName}
+                            placeholder={'Имя'}
+                            textRules={'Минимум 2 символа'}
+                            onChange={(newValue) => {
+                                updateFirstName(newValue);
+                            }}
+                            ruleHandler={(value) => {
+                                return value.length < 2;
+                            }}
+                        />
 
-                        <div className={"custom-input-container"}>
-                            <input type="text" placeholder="Фамилия" className={"custom-input"}/>
-                            <div>Минимум 2 символа</div>
-                        </div>
+                        <CustomInput
+                            key={2}
+                            value={lastName}
+                            placeholder={'Фамилия'}
+                            textRules={'Минимум 2 символа'}
+                            onChange={(newValue) => {
+                                updateLastName(newValue);
+                            }}
+                            ruleHandler={(value) => {
+                                return value.length < 2 || value.length === 0;
+                            }}
+                        />
 
-                        <div className={"custom-input-container"}>
-                            <input type="text" placeholder="E-mail" className={"custom-input"}/>
-                            <div>Введите Вашу электронную почту</div>
-                        </div>
+                        <CustomInput
+                            key={3}
+                            value={email}
+                            placeholder={'E-mail'}
+                            textRules={'Введите Вашу электронную почту'}
+                            onChange={(newValue) => {
+                                updateEmail(newValue);
+                            }}
+                            ruleHandler={(value) => {
+                                const re = /\S+@\S+\.\S+/;
+                                return !re.test(value) && value.length > 0;
+                            }}
+                        />
 
-                        <div className={"custom-input-container"}>
-                            <input type="text" placeholder="Никнейм" className={"custom-input"}/>
-                            <div>Введите желаймый никнейм</div>
-                        </div>
+                        <CustomInput
+                            key={4}
+                            value={nickname}
+                            placeholder={'Никнейм'}
+                            textRules={'Минимум 5 символов'}
+                            onChange={(newValue) => {
+                                updateNickName(newValue);
+                            }}
+                            ruleHandler={(value) => {
+                                return value.length < 5 || value.length === 0;
+                            }}
+                        />
+
+                        <CustomInput
+                            key={5}
+                            value={password}
+                            isPassword={true}
+                            placeholder={'Пароль'}
+                            textRules={'Минимум 8 символов'}
+                            onChange={(newValue) => {
+                                updatePassword(newValue);
+                            }}
+                            ruleHandler={(value) => {
+                                return value.length < 8 || value.length === 0;
+                            }}
+                        />
                     </div>
                 </div>
 
