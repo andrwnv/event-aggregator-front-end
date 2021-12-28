@@ -35,13 +35,13 @@ export default function RegistrationPage() {
                         // display: 'flex',
                     }} className={"default-bottom-margin"}>
                         <MiniProfile
-                            firstName={"Имя"}
-                            lastName={"Фамилия"}
-                            email={"some_test_email@gmail.com"}
+                            firstName={firstName.length > 0 ? firstName : 'Имя'}
+                            lastName={lastName.length > 0 ? lastName : 'Фамилия'}
+                            email={email.length > 0 ? email : 'your_email@your_email.ru'}
                             location={"г. Томск"}
                             isGuest={false}
                             avatarLink={"https://react.semantic-ui.com/images/avatar/large/matthew.png"}
-                            nickname={"andrwnv"}
+                            nickname={nickname.length > 0 ? nickname : 'your_nickname'}
                         />
                     </div>
                 </div>

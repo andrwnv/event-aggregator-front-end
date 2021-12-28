@@ -28,20 +28,6 @@
     color: #141C22;
 }
 
-.reg-button-base {
-    background: none;
-    color: inherit;
-    border: none;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
-
-    padding: 17px;
-    border-radius: 10vh;
-
-    margin-left: 2vh;
-}
-
 .custom-input-container-error {
     border: 1px solid #b21762;
 }
