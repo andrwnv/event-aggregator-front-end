@@ -1,0 +1,49 @@
+.event-card-root {
+    background-color: #E3EBF1;
+    border-radius: 7px;
+
+    box-shadow: 0 4px 15px rgba(227, 235, 241, 0.24);
+}
+
+.event-card-root > * {
+    margin: 17px;
+}
+
+.event-card-img {
+    object-fit: cover;
+}
+
+.text-primary-color {
+    color: #141C22;
+}
+
+.event-card-title {
+    font-size: 2em;
+    font-weight: 600;
+}
+
+.event-card-second-text {
+    font-size: 1.5em;
+    font-weight: 500;
+}
+
+.event-card-button {
+    justify-content: center;
+    align-content: center;
+
+    background-color: #273540;
+    border-radius: 3px;
+
+    padding: 10px 0;
+    min-width: 45%;
+
+    font-weight: 500;
+    font-size: 1.3em;
+    color: #E3EBF1;
+
+    transition: transform .2s;
+}
+
+.event-card-button:hover {
+    transform: scale(1.05);
+}
