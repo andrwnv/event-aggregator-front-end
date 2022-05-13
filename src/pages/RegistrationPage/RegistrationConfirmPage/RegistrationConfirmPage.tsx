@@ -32,7 +32,6 @@ export default function RegistrationConfirmPage() {
                             location={"г. Томск"}
                             isGuest={false}
                             avatarLink={"https://react.semantic-ui.com/images/avatar/large/matthew.png"}
-                            nickname={'your_nickname'}
                         />
                     </div>
 

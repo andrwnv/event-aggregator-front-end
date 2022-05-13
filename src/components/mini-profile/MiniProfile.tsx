@@ -6,7 +6,6 @@ import './MiniProfile.css';
 type MiniProfileInfo = {
     firstName: string;
     lastName: string;
-    nickname: string;
     email: string;
     location: string;
     avatarLink: string;
@@ -20,7 +19,7 @@ export default function MiniProfile(info: MiniProfileInfo) {
                 className={"vertical-container center-container"}
                 style={{marginRight: "2vh"}}
             >
-                <img className={"avatar"} src={info.avatarLink} alt={`${info.nickname} avatar`}/>
+                <img className={"avatar"} src={info.avatarLink} alt={`${info.email} avatar`}/>
             </div>
 
             <div
@@ -32,7 +31,7 @@ export default function MiniProfile(info: MiniProfileInfo) {
                         style={{
                             fontSize: "2.5vh",
                         }}>
-                        {info.lastName} {info.firstName} ({info.nickname})
+                        {info.lastName} {info.firstName}
                     </div>
                     <div style={{fontSize: "1.8vh"}}>
                         <div>{info.email}</div>
