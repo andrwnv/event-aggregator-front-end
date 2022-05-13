@@ -5,15 +5,19 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import RegistrationConfirmPage from './pages/RegistrationPage/RegistrationConfirmPage/RegistrationConfirmPage';
 import EventCard from './components/event-card/EventCard';
+import MapPage from './pages/MapPage/MapPage';
+
+import './App.css'
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
+                    <Route path='' element={<MapPage />} />
                     <Route path='registration'>
-                        <Route path='confirmed' element={<RegistrationConfirmPage />}/>
-                        <Route path='' element={<RegistrationPage />}/>
+                        <Route path='confirmed' element={<RegistrationConfirmPage />} />
+                        <Route path='' element={<RegistrationPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
