@@ -1,20 +1,45 @@
-import React, { useEffect } from 'react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import React, { Component, useEffect, useState } from 'react';
+import { MapContainer, Marker, Popup, TileLayer, useMap, useMapEvents } from 'react-leaflet';
 
-const remove = (sel: string) => document.querySelectorAll(sel).forEach(el => el.remove());
+function ClickableMapComponent() {
+    const [initialPosition, setInitialPosition] = useState<[number, number]>([0,0]);
+    const [selectedPosition, setSelectedPosition] = useState<[number, number]>([0,0]);
 
-export default function MapPage() {
-    return (
-        <MapContainer center={[51.505, -0.09]} zoom={13} scrollWheelZoom={true}>
+    useEffect(() => {
+        navigator.geolocation.getCurrentPosition(position => {
+            const { latitude, longitude } = position.coords;
+            setInitialPosition([latitude, longitude]);
+
+        });
+    }, []);
+
+
+    const Markers = () => {
+        useMapEvents({
+            click(e) {
+                alert(`lon:${e.latlng.lng} lat:${e.latlng.lat}`)
+                setSelectedPosition([
+                    e.latlng.lat,
+                    e.latlng.lng
+                ]);
+            },
+        })
+
+        return (selectedPosition ? <div /> : null )
+    }
+
+    return(
+        <MapContainer
+            center={selectedPosition || initialPosition}
+            zoom={12}
+        >
+            <Markers />
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[51.505, -0.09]}>
-                <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-            </Marker>
         </MapContainer>
-    );
+    )
 }
+
+export default ClickableMapComponent;
