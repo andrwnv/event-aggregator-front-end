@@ -4,17 +4,17 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import RegistrationConfirmPage from './pages/RegistrationPage/RegistrationConfirmPage/RegistrationConfirmPage';
-import EventCard from './components/event-card/EventCard';
-import MapPage from './pages/MapPage/MapPage';
+import ExplorePage from './pages/ExplorePage/ExplorePage';
 
 import './App.css'
+import 'rsuite/styles/index.less';
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path='' element={<MapPage />} />
+                    <Route path='' element={<ExplorePage />} />
                     <Route path='registration'>
                         <Route path='confirmed' element={<RegistrationConfirmPage />} />
                         <Route path='' element={<RegistrationPage />} />
@@ -22,7 +22,6 @@ function App() {
                 </Routes>
             </BrowserRouter>
 
-            {/*<RegistrationConfirmPage />*/}
             {/*<div style={{*/}
             {/*    display: 'flex',*/}
             {/*    width: '90%',*/}
