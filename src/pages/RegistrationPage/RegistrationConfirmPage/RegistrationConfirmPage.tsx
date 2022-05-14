@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import MiniProfile from '../../../components/mini-profile/MiniProfile';
 
@@ -7,6 +8,7 @@ import '../RegistrationPage.css';
 
 
 export default function RegistrationConfirmPage() {
+    const navigate = useNavigate();
 
     return (
         <div className={"root-container-reg"}>
@@ -55,8 +57,9 @@ export default function RegistrationConfirmPage() {
                                     paddingLeft: "6vw",
                                     paddingRight: "6vw"
                                 }}
+                                onClick={() => {navigate('/')}}
                             >
-                                Отлично
+                                    Отлично
                             </div>
                         </button>
 
