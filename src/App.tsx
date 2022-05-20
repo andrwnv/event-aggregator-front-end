@@ -8,17 +8,25 @@ import ExplorePage from './pages/ExplorePage/ExplorePage';
 
 import './App.css'
 import 'rsuite/styles/index.less';
+import MainPage from './pages/MainPage/MainPage';
+import AuthenticatedRoute from './components/custom-roures/AuthenticatedRoute';
+import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 function App() {
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path='' element={<ExplorePage />} />
+                    <Route path='*' element={<NotFoundPage />} />
+                    <Route path='explore' element={<AuthenticatedRoute />}>
+                        <Route path='' element={<ExplorePage />} />
+                    </Route>
+                    <Route path='explore' element={<ExplorePage />} />
                     <Route path='registration'>
                         <Route path='confirmed' element={<RegistrationConfirmPage />} />
                         <Route path='' element={<RegistrationPage />} />
                     </Route>
+                    <Route path='' element={<MainPage />} />
                 </Routes>
             </BrowserRouter>
 
