@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Container, Sidebar, Sidenav, Nav, Navbar, Dropdown } from 'rsuite';
+import { Container, Sidebar, Sidenav, Nav, Navbar } from 'rsuite';
 
 import ArrowRightLineIcon from '@rsuite/icons/ArrowRightLine';
 import ArrowLeftLineIcon from '@rsuite/icons/ArrowLeftLine';
-import GearCircle from '@rsuite/icons/legacy/GearCircle';
 import Dashboard from '@rsuite/icons/Dashboard';
 import LogoAnalytics from '@rsuite/icons/legacy/LogoAnalytics';
 
 import ClickableMapComponent from '../../components/clickable-map/ClickableMap';
 import { GeoPoint } from '../../misc/GeoPoint';
+// import useAuth from '../../hooks/useAuth';
 
 
 const NavToggle = ({ expand, onChange }: any) => {
@@ -28,6 +28,8 @@ const NavToggle = ({ expand, onChange }: any) => {
 export default function ExplorePage() {
     const [expand, setExpand] = useState(false);
     const [active, setActive] = React.useState('1');
+
+    // const {user, logout} = useAuth();
 
     const headerStyles: React.CSSProperties = {
         padding: 18,
