@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Message, toaster } from 'rsuite';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 import MiniProfile from '../../components/mini-profile/MiniProfile';
 import CustomInput from '../../components/custom-input/CustomInput';
@@ -19,6 +19,12 @@ export default function RegistrationPage() {
     const [passwordConfirm, updatePasswordConfirm] = useState('');
 
     const navigate = useNavigate();
+
+    const jwt = localStorage.getItem('auth-key');
+    if (jwt !== null) {
+        return <Navigate to='/' replace={true} />
+    }
+
 
     // Message box creator
     const spawnMessageBox = (message: string) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import MiniProfile from '../../../components/mini-profile/MiniProfile';
 
@@ -9,6 +9,11 @@ import '../RegistrationPage.css';
 
 export default function RegistrationConfirmPage() {
     const navigate = useNavigate();
+
+    const jwt = localStorage.getItem('auth-key');
+    if (jwt !== null) {
+        return <Navigate to='/' replace={true} />
+    }
 
     return (
         <div className={"root-container-reg"}>
@@ -57,7 +62,7 @@ export default function RegistrationConfirmPage() {
                                     paddingLeft: "6vw",
                                     paddingRight: "6vw"
                                 }}
-                                onClick={() => {navigate('/')}}
+                                onClick={() => {navigate('/', {replace: true})}}
                             >
                                     Отлично
                             </div>
