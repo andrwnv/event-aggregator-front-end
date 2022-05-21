@@ -1,10 +1,9 @@
 import React from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-import MiniProfile from '../../../components/mini-profile/MiniProfile';
-
 import './RegistrationConfirmPage.css';
 import '../RegistrationPage.css';
+import { Content, FlexboxGrid } from 'rsuite';
 
 
 export default function RegistrationConfirmPage() {
@@ -16,35 +15,27 @@ export default function RegistrationConfirmPage() {
     }
 
     return (
-        <div className={"root-container-reg"}>
-            <div className={"confirm-bg"}>
-                <div className={"default-bottom-margin"} style={{
+        <FlexboxGrid justify="center" align='middle' className={"root-container-reg"}>
+            <FlexboxGrid.Item colspan={15} className={"confirm-bg"}>
+                <Content className={"default-bottom-margin"} style={{
                     fontWeight: 600,
-                    fontSize: "3vh"
+                    fontSize: "3vh",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                 }}>
                     <div style={{textAlign: 'center'}}>
                         Добро пожаловать!
                     </div>
-
-                    <div className={"default-bottom-margin"}
-                        style={{
-                            marginTop: '15vh',
-                            marginBottom: '15vh'
-                        }}
-                    >
-                        <MiniProfile
-                            firstName={'Имя'}
-                            lastName={'Фамилия'}
-                            email={'your_email@your_email.ru'}
-                            location={"г. Томск"}
-                            isGuest={false}
-                            avatarLink={"https://react.semantic-ui.com/images/avatar/large/matthew.png"}
-                        />
+                    <div style={{textAlign: 'center', fontSize: '0.7em'}}>
+                        Регистрация прошла успешно
                     </div>
 
                     <div style={{
                         display: "flex",
                         marginBottom: "1vh",
+                        marginTop: "2.5vh",
                         justifyContent: "center",
                         alignItems: "center",
                         flexDirection: "column",
@@ -68,7 +59,9 @@ export default function RegistrationConfirmPage() {
                             </div>
                         </button>
 
-                        <div className={"second-font-size"}>
+                        <div className={"second-font-size"} style={{
+                            textAlign: 'center'
+                        }}>
                             Имеются вопросы?
                             <button style={{
                                 background: "none",
@@ -83,8 +76,8 @@ export default function RegistrationConfirmPage() {
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </Content>
+            </FlexboxGrid.Item>
+        </FlexboxGrid>
     )
 }
