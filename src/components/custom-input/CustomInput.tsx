@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 import './CustomInput.css';
+import { FlexboxGrid } from 'rsuite';
 
 type CustomInputProps = {
     key: number;
@@ -17,10 +18,10 @@ export default function CustomInput(props: CustomInputProps) {
     const [haveError, setErrorState] = useState(false);
 
     return (
-        <div
+        <FlexboxGrid
             key={props.key}
             className={(haveError ? "custom-input-container custom-input-container-error" : "custom-input-container")}
-            onClick={(e) => {
+            onClick={(e: any) => {
                 if (inputRef.current !== null) {
                     inputRef.current.focus();
                 }
@@ -39,6 +40,6 @@ export default function CustomInput(props: CustomInputProps) {
                 className={"custom-input"}
                 ref={inputRef}/>
             <div>{props.textRules}</div>
-        </div>
+        </FlexboxGrid>
     );
 }

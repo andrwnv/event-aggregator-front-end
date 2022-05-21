@@ -6,7 +6,8 @@
     display: flex;
     flex-direction: column;
 
-    width: 20vw;
+    width: 100%;
+    font-size: 0.9em;
 
     margin-bottom: 24px;
     margin-right: 24px;
@@ -22,6 +23,7 @@
 .custom-input {
     all: unset;
     margin-bottom: 5px;
+    padding-right: 10px;
 }
 
 .custom-input::placeholder {
