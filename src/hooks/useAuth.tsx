@@ -10,16 +10,17 @@ import { Login, Me } from '../api/auth/auth.api';
 export interface AuthContextType {
     user: User;
     loading: boolean;
-    error?: AxiosResponse<any>;
+    error?: AxiosResponse;
     login: (dto: LogInDto) => void;
     logout: () => void;
+    me: () => void;
 }
 
 const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({children} : { children: ReactNode }): JSX.Element {
     const [user, setUser] = useState<User>();
-    const [error, setError] = useState<AxiosResponse<any> | null>();
+    const [error, setError] = useState<AxiosResponse | undefined>();
     const [loading, setLoading] = useState<boolean>(false);
     const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
     const navigate = useNavigate();
@@ -27,34 +28,36 @@ export function AuthProvider({children} : { children: ReactNode }): JSX.Element 
 
     useEffect(() => {
         if (error)
-            setError(null);
-    }, [location.pathname, error]);
-
-    const _me = () => {
-        Me().then(user => setUser(user))
-            .catch(err => setError(err))
-            .finally(() => setLoadingInitial(false));
-    }
+            setError(undefined);
+    }, [location.pathname]);
 
     useEffect(() => {
-        _me();
+        me();
     }, [])
+
+    function me() {
+        Me().then(user => setUser(user))
+            .catch(err => {
+                setError(err.response)
+            })
+            .finally(() => setLoadingInitial(false));
+    }
 
     function login(dto: LogInDto) {
         setLoading(true);
 
         Login(dto).then((res: LoginResult) => {
-            localStorage.setItem('custom-roures-key', res.token);
-            _me();
+            localStorage.setItem('api-key', res.token);
+            me();
             navigate('/', {replace: true});
         })
-            .catch(err => setError(err))
+            .catch(err => setError(err.response))
             .finally(() => setLoading(false));
     }
 
     function logout() {
         // todo(andrwnv): api logout
-        localStorage.removeItem('custom-roures-key');
+        localStorage.removeItem('api-key');
     }
 
     const memValue = useMemo(
@@ -63,7 +66,8 @@ export function AuthProvider({children} : { children: ReactNode }): JSX.Element 
             loading,
             error,
             login,
-            logout
+            logout,
+            me
         } as AuthContextType), [user, loading, error]
     )
 
