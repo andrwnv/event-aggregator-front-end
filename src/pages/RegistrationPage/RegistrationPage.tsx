@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 
-import { Message, toaster } from 'rsuite';
+import { Container, Content, FlexboxGrid, Message, toaster } from 'rsuite';
 import { useNavigate, Navigate } from 'react-router-dom';
 
-import MiniProfile from '../../components/mini-profile/MiniProfile';
 import CustomInput from '../../components/custom-input/CustomInput';
 
 import '../../fonts.css';
@@ -22,7 +21,7 @@ export default function RegistrationPage() {
 
     const jwt = localStorage.getItem('auth-key');
     if (jwt !== null) {
-        return <Navigate to='/' replace={true} />
+        return <Navigate to='/' replace={true}/>
     }
 
 
@@ -57,156 +56,144 @@ export default function RegistrationPage() {
     }
 
     return (
-        <div className={"root-container-reg"}>
-            <div className={"reg-form"}>
-                <div className={"default-bottom-margin"} style={{
-                    fontWeight: 600,
-                    fontSize: "3vh"
-                }}>
-                    Присоединяйтесь к нам!
-                </div>
-
-                <div>
+        <Container>
+            <Content className={"root-container-reg"}>
+                <FlexboxGrid justify="center" align='middle' className={"reg-form"}>
                     <div className={"default-bottom-margin"} style={{
-                        fontWeight: 500,
-                        fontSize: "2.1vh"
+                        fontWeight: 600,
+                        fontSize: "3vh",
+                        textAlign: 'center',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        display: 'flex'
                     }}>
-                        Ваш профиль будет выглять так
+                        Присоединяйтесь к нам!
                     </div>
 
-                    <div className={"default-bottom-margin"}>
-                        <MiniProfile
-                            firstName={firstName.length > 0 ? firstName : 'Имя'}
-                            lastName={lastName.length > 0 ? lastName : 'Фамилия'}
-                            email={email.length > 0 ? email : 'your_email@your_email.ru'}
-                            location={"г. Томск"}
-                            isGuest={false}
-                            avatarLink={"https://react.semantic-ui.com/images/avatar/large/matthew.png"}
-                        />
-                    </div>
-                </div>
+                    <FlexboxGrid justify="center" align='middle' style={{
+                        paddingTop: "2vh",
+                    }}>
+                        <div style={{
+                            fontWeight: 500,
+                            fontSize: "2.1vh"
+                        }} className={"default-bottom-margin"}>
+                            Предоставьте нам следующие данные
+                        </div>
 
-                <div style={{
-                    paddingTop: "2vh",
-                }}>
-                    <div style={{
-                        fontWeight: 500,
-                        fontSize: "2.1vh"
-                    }} className={"default-bottom-margin"}>
-                        Предоставьте нам следующие данные
-                    </div>
+                        <FlexboxGrid style={{flexWrap: "wrap"}}>
+                            <CustomInput
+                                key={1}
+                                value={firstName}
+                                placeholder={'Имя'}
+                                textRules={'Минимум 2 символа'}
+                                onChange={(newValue) => {
+                                    updateFirstName(newValue);
+                                }}
+                                ruleHandler={(value) => {
+                                    return value.length < 2;
+                                }}
+                            />
 
-                    <div
-                        style={{
-                            display: "flex",
+                            <CustomInput
+                                key={2}
+                                value={lastName}
+                                placeholder={'Фамилия'}
+                                textRules={'Минимум 2 символа'}
+                                onChange={(newValue) => {
+                                    updateLastName(newValue);
+                                }}
+                                ruleHandler={(value) => {
+                                    return value.length < 2 || value.length === 0;
+                                }}
+                            />
+
+                            <CustomInput
+                                key={3}
+                                value={email}
+                                placeholder={'E-mail'}
+                                textRules={'Введите Вашу электронную почту'}
+                                onChange={(newValue) => {
+                                    updateEmail(newValue);
+                                }}
+                                ruleHandler={(value) => {
+                                    const re = /\S+@\S+\.\S+/;
+                                    return !re.test(value) && value.length > 0;
+                                }}
+                            />
+
+                            <CustomInput
+                                key={4}
+                                value={password}
+                                isPassword={true}
+                                placeholder={'Пароль'}
+                                textRules={'Минимум 8 символов'}
+                                onChange={(newValue) => {
+                                    updatePassword(newValue);
+                                }}
+                                ruleHandler={(value) => {
+                                    return value.length < 8 || value.length === 0;
+                                }}
+                            />
+                            <CustomInput
+                                key={5}
+                                value={passwordConfirm}
+                                isPassword={true}
+                                placeholder={'Подтверди пароль'}
+                                textRules={'Минимум 8 символов'}
+                                onChange={(newValue) => {
+                                    updatePasswordConfirm(newValue);
+                                }}
+                                ruleHandler={(value) => {
+                                    return value.length < 8 || value.length === 0;
+                                }}
+                            />
+                        </FlexboxGrid>
+
+                        <FlexboxGrid justify="center" align='middle' style={{
+
                             flexWrap: "wrap"
-                        }}
-                    >
-                        <CustomInput
-                            key={1}
-                            value={firstName}
-                            placeholder={'Имя'}
-                            textRules={'Минимум 2 символа'}
-                            onChange={(newValue) => {
-                                updateFirstName(newValue);
-                            }}
-                            ruleHandler={(value) => {
-                                return value.length < 2;
-                            }}
-                        />
-
-                        <CustomInput
-                            key={2}
-                            value={lastName}
-                            placeholder={'Фамилия'}
-                            textRules={'Минимум 2 символа'}
-                            onChange={(newValue) => {
-                                updateLastName(newValue);
-                            }}
-                            ruleHandler={(value) => {
-                                return value.length < 2 || value.length === 0;
-                            }}
-                        />
-
-                        <CustomInput
-                            key={3}
-                            value={email}
-                            placeholder={'E-mail'}
-                            textRules={'Введите Вашу электронную почту'}
-                            onChange={(newValue) => {
-                                updateEmail(newValue);
-                            }}
-                            ruleHandler={(value) => {
-                                const re = /\S+@\S+\.\S+/;
-                                return !re.test(value) && value.length > 0;
-                            }}
-                        />
-
-                        <CustomInput
-                            key={4}
-                            value={password}
-                            isPassword={true}
-                            placeholder={'Пароль'}
-                            textRules={'Минимум 8 символов'}
-                            onChange={(newValue) => {
-                                updatePassword(newValue);
-                            }}
-                            ruleHandler={(value) => {
-                                return value.length < 8 || value.length === 0;
-                            }}
-                        />
-                        <CustomInput
-                            key={5}
-                            value={passwordConfirm}
-                            isPassword={true}
-                            placeholder={'Подтверди пароль'}
-                            textRules={'Минимум 8 символов'}
-                            onChange={(newValue) => {
-                                updatePasswordConfirm(newValue);
-                            }}
-                            ruleHandler={(value) => {
-                                return value.length < 8 || value.length === 0;
-                            }}
-                        />
-                    </div>
-                </div>
-
-                <div style={{
-                    display: "flex",
-                    flexDirection: "row-reverse",
-                    marginBottom: "1vh"
-                }}>
-                    <button className={"reg-button-base"}
-                            style={{
-                                backgroundColor: "#141C22",
-                                color: "#D2D6D9"
-                            }}
-                            onClick={makeNewUser}>
-                        Присоедениться
-                    </button>
-                    <button className={"reg-button-base"}
-                            style={{
-                                backgroundColor: "#D3D7DA",
-                                color: "#141C22"
+                        }}>
+                            <button className={"reg-button-base"}
+                                    style={{
+                                        backgroundColor: "#141C22",
+                                        color: "#D2D6D9",
+                                        marginBottom: '1em',
+                                        marginLeft: '1em',
+                                        marginRight: '1em'
+                                    }}
+                                    onClick={makeNewUser}>
+                                Присоедениться
+                            </button>
+                            <button className={"reg-button-base"}
+                                    style={{
+                                        backgroundColor: "#D3D7DA",
+                                        color: "#141C22",
+                                        marginBottom: '1em',
+                                        marginLeft: '1em',
+                                        marginRight: '1em'
+                                    }}>
+                                Я передумал
+                            </button>
+                        </FlexboxGrid>
+                        <FlexboxGrid justify="center" align='middle' className={"second-font-size"} style={{
+                            textAlign: 'center'
+                        }}>
+                            Имеются вопросы?
+                            <button style={{
+                                background: "none",
+                                color: "inherit",
+                                border: "none",
+                                font: "inherit",
+                                cursor: "pointer",
+                                outline: "inherit",
+                                textDecoration: "underline"
                             }}>
-                        Я передумал
-                    </button>
-                </div>
-                <div>
-                    Имеются вопросы?
-                    <button style={{
-                        background: "none",
-                        color: "inherit",
-                        border: "none",
-                        font: "inherit",
-                        cursor: "pointer",
-                        outline: "inherit",
-                        textDecoration: "underline"
-                    }}>
-                        Задайте их нам!
-                    </button>
-                </div>
-            </div>
-        </div>
+                                Задайте их нам!
+                            </button>
+                        </FlexboxGrid>
+                    </FlexboxGrid>
+                </FlexboxGrid>
+            </Content>
+        </Container>
     );
 }
