@@ -13,7 +13,7 @@ export const Login = async (info: LogInDto): Promise<LoginResult> => {
             password: info.password
         },
     });
-    return {token: response.data.token};
+    return {token: response.data.result};
 }
 
 export const Me = async (): Promise<User> => {

@@ -1,5 +1,5 @@
 export const authHeader = () => {
-    const jwt = localStorage.getItem('custom-roures-key');
+    const jwt = localStorage.getItem('api-key');
     return {
         Authorization: `Bearer ${jwt ? jwt : ''}`
     }
