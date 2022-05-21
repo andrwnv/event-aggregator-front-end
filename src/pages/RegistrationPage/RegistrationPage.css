@@ -17,8 +17,21 @@
     box-shadow: 0 4px 13px rgba(207, 211, 215, 0.1);
     backdrop-filter: blur(20px);
     border-radius: 21px;
-    max-width: 76vw;
     padding: 6vh;
+
+    max-width: 30vw;
+}
+
+@media screen and (max-width: 1000px) {
+    .reg-form {
+        max-width: 70vw;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .reg-form {
+        max-width: 100%;
+    }
 }
 
 .default-bottom-margin {
