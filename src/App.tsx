@@ -21,9 +21,9 @@ function App() {
                 <AuthProvider>
                     <Routes>
                         <Route path='*' element={<NotFoundPage/>}/>
-                        <Route path='explore' element={<AuthenticatedRoute/>}>
-                            <Route path='' element={<ExplorePage/>}/>
-                        </Route>
+                        {/*<Route path='explore' element={<AuthenticatedRoute/>}>*/}
+                        {/*    <Route path='' element={<ExplorePage/>}/>*/}
+                        {/*</Route>*/}
                         <Route path='explore' element={<ExplorePage/>}/>
                         <Route path='sign_in' element={<SignInPage/>}/>
                         <Route path='sign_up'>
@@ -34,26 +34,6 @@ function App() {
                     </Routes>
                 </AuthProvider>
             </BrowserRouter>
-
-            {/*<div style={{*/}
-            {/*    display: 'flex',*/}
-            {/*    width: '90%',*/}
-            {/*    flexDirection: 'row',*/}
-            {/*}}>*/}
-            {/*    {*/}
-            {/*        [1, 2, 3, 4].map(() => {*/}
-            {/*            return (*/}
-            {/*                <EventCard id={'123123-123-123'} title={'New Street Vision Art'}*/}
-            {/*                           shortText={'Съешь ещё этих мягких французских булок, да выпей же чаю! Съешь ещё этих мягких французских булок, да выпей же чаю!'}*/}
-            {/*                           location={'Россия, Томск'} pictureLinks={[*/}
-            {/*                    'http://127.0.0.1:9090/api/v1/load/6tJxjJAs4Os.jpg', 'https://www.riatomsk.ru/Upload/sub-9/49078_3.jpg',*/}
-            {/*                    'https://obzor.city/data/images/news_2017/8/raznoe/dsc0146.jpg', 'https://www.riatomsk.ru/Upload/sub-9/49075_4.jpg',*/}
-            {/*                    'https://proprikol.ru/wp-content/uploads/2020/05/kartinki-graffiti-45.jpg']}*/}
-            {/*                />*/}
-            {/*            );*/}
-            {/*        })*/}
-            {/*    }*/}
-            {/*</div>*/}
         </div>
     );
 }

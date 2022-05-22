@@ -25,16 +25,18 @@ export default function MainPage() {
             <Content>
                 <FlexboxGrid justify="center" align='middle' className={'adaptive-flex'}>
                     <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
-                        <InputPicker data={Countries} style={{width: 300}}>
-                        </InputPicker>
+                        {/*<InputPicker data={Countries} style={{width: 300}}>*/}
+                        {/*</InputPicker>*/}
+
+                        <h3 style={{paddingLeft: '14px', marginTop: '1em', color: '#E3EBF1'}}>
+                            Интересное
+                        </h3>
 
                         <Content className={'scroll-area'} ref={ref} {...events}>
                             {
                                 [1, 2, 3, 4, 5].map(() => {
                                     return (
-                                        <div style={{
-                                            maxWidth: '500px'
-                                        }} className={'scroll-item'}>
+                                        <div className={'scroll-item scroll-item-sizes'}>
                                             <EventCard id={'123123-123-123'} title={'New Street Vision Art'}
                                                        shortText={'Съешь ещё этих мягких французских булок, да выпей же чаю! Съешь ещё этих мягких французских булок, да выпей же чаю!'}
                                                        location={'Россия, Томск'} pictureLinks={[
