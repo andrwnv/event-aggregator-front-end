@@ -1,5 +1,6 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import { Container, Content, FlexboxGrid, Message, toaster } from 'rsuite';
+import React, { FormEvent, useState } from 'react';
+import { Container, Content, FlexboxGrid } from 'rsuite';
+import { useNavigate } from 'react-router-dom';
 
 import useAuth from '../../hooks/useAuth';
 
@@ -7,7 +8,7 @@ import CustomInput from '../../components/custom-input/CustomInput';
 import { ReactComponent as Logo } from '../../misc/icons/logo.svg';
 
 import './SignInPage.css';
-import { useNavigate } from 'react-router-dom';
+
 
 const titleStyle: React.CSSProperties = {
     textAlign: 'center',
@@ -28,25 +29,29 @@ export default function SignInPage() {
         })
     }
 
+    const emailRule = (value: string) => {
+        const re = /\S+@\S+\.\S+/;
+        return !re.test(value) && value.length > 0;
+    }
+
     return (
         <Container className={'root-container-sign-in'}>
-            <Content>
-                <form onSubmit={signIn}>
-                    <FlexboxGrid align='middle' justify='center' style={{
-                        height: '100vh',
-                        flexDirection: 'column'
+            {/*<Content>*/}
+                <FlexboxGrid align='middle' justify='center' style={{
+                    flexDirection: 'column'
+                }}>
+                    <Logo fill={'#D6D9DCA5'} style={{width: '4em'}}/>
+                    <div style={{
+                        marginBottom: '1em',
+                        color: '#D6D9DCA5',
+                        fontSize: '1.3em',
+                        fontWeight: 600
                     }}>
-                        <Logo fill={'#D6D9DCA5'} style={{width: '5%'}}/>
-                        <div style={{
-                            marginBottom: '1em',
-                            color: '#D6D9DCA5',
-                            fontSize: '1.3em',
-                            fontWeight: 600
-                        }}>
-                            Take Place
-                        </div>
-
+                        Take Place
+                    </div>
+                    <form onSubmit={signIn}>
                         <FlexboxGrid.Item className={"sign-in-form"}>
+
                             <CustomInput
                                 key={3}
                                 value={email}
@@ -75,8 +80,8 @@ export default function SignInPage() {
                                 }}
                             />
 
-                            { error?.status === 401 && <p style={titleStyle}>Неправильный логин или пароль!</p>}
-                            { error?.status === 500 && <p style={titleStyle}>Ошибка сервера попробуй позже</p>}
+                            {error?.status === 401 && <p style={titleStyle}>Неправильный логин или пароль!</p>}
+                            {error?.status === 500 && <p style={titleStyle}>Ошибка сервера попробуй позже</p>}
 
                             <button className={"reg-button-base"}
                                     style={{
@@ -113,9 +118,9 @@ export default function SignInPage() {
                                 </button>
                             </FlexboxGrid>
                         </FlexboxGrid.Item>
-                    </FlexboxGrid>
-                </form>
-            </Content>
+                    </form>
+                </FlexboxGrid>
+            {/*</Content>*/}
         </Container>
     )
 }
