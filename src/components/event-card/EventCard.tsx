@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Carousel from 'rsuite/Carousel';
 
 import './EventCard.css';
+import { FlexboxGrid } from 'rsuite';
 
 type EventCardProps = {
     id: string;
@@ -15,21 +16,23 @@ type EventCardProps = {
 export default function EventCard(props: EventCardProps) {
     const [liked, setLike] = useState(false);
 
-    const openMoreInfo = () => { }
+    const openMoreInfo = () => {
+    }
 
     const likeHandler = () => {
         setLike(!liked);
     }
 
     return (
-        <div className={'event-card-root'} key={props.id}>
-            <div style={{width: '20vw'}}>
+        <FlexboxGrid className={'event-card-root'} key={props.id}>
+            <div style={{padding: '17px'}}>
                 <Carousel
-                    style={{borderRadius: '2%'}}
+                    style={{borderRadius: '2%', display: 'flex', padding: 0, height: '200px'}}
                     shape={'bar'}
                     placement={'bottom'}
                     autoplay={true}
                     autoplayInterval={5000}
+                    // className={'event-card-root'}
                 >
                     {props.pictureLinks.map(link => {
                         return (
@@ -54,11 +57,13 @@ export default function EventCard(props: EventCardProps) {
                 </div>
             </div>
 
-            <div className={'event-card-second-text text-primary-color'} style={{marginBottom: '34px'}}>
-                {props.shortText}
-            </div>
+            <FlexboxGrid align={'middle'} justify={'start'} style={{width: '100%', height: '20vh'}}>
+                <div className={'event-card-second-text text-primary-color'}>
+                    {props.shortText}
+                </div>
+            </FlexboxGrid>
 
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            <FlexboxGrid justify={'space-between'} style={{flexDirection: 'row', width: '100vw'}}>
                 <button className={'event-card-button'} onClick={openMoreInfo}>Подробнее</button>
                 <button className={'event-card-button'} onClick={likeHandler}>
                     <svg
@@ -71,7 +76,7 @@ export default function EventCard(props: EventCardProps) {
                             fill={liked ? "#ED668A" : "white"}/>
                     </svg>
                 </button>
-            </div>
-        </div>
+            </FlexboxGrid>
+        </FlexboxGrid>
     );
 }
