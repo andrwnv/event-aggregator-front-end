@@ -1,0 +1,28 @@
+.main-page-root {
+    background-color: #141C22;
+    background-image: url('../misc/resources/background-figures.png');
+    background-size: cover;
+}
+
+.scroll-area {
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.scroll-area::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scroll-area {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.scroll-item {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+}
