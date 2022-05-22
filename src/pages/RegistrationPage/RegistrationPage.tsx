@@ -171,7 +171,7 @@ export default function RegistrationPage() {
                                         marginBottom: '1em',
                                         marginLeft: '1em',
                                         marginRight: '1em'
-                                    }}>
+                                    }} onClick={() => navigate('/')}>
                                 Я передумал
                             </button>
                         </FlexboxGrid>
