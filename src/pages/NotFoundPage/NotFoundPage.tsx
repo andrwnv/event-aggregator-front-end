@@ -4,6 +4,7 @@ import { Container, Content, FlexboxGrid, Header } from 'rsuite';
 import { useNavigate } from 'react-router-dom';
 
 import './NotFoundPage.css';
+import TakePlaceHeader from '../../components/custom-header/TakePlaceHeader';
 
 
 export default function NotFoundPage() {
@@ -11,11 +12,7 @@ export default function NotFoundPage() {
 
     return (
         <Container className={'root-container'}>
-            <Header style={{
-                position: 'fixed'
-            }}>
-                HI
-            </Header>
+            <TakePlaceHeader />
             <Content>
                 <FlexboxGrid justify="center">
                     <FlexboxGrid.Item colspan={20}>

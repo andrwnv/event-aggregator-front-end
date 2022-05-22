@@ -33,21 +33,35 @@ export default function TakePlaceHeader() {
             )
     }
 
+    const NavHeader = () => (
+        <Navbar.Header>
+            <Nav.Item className={'nav-item-style'} onClick={() => navigate('/')}>
+                <Logo fill={'#141C22'} style={{width: '4em'}}/>
+                <a className='logo-style'>TAKE PLACE</a>
+            </Nav.Item>
+        </Navbar.Header>
+    );
+
+    const NavItems = () => (
+        <>
+            <Nav.Item className={'nav-item-style'} onClick={() => navigate('/explore')}>
+                Осмотреться
+            </Nav.Item>
+            <Nav.Item className={'nav-item-style'} onClick={() => navigate('/histories')}>
+                Истории
+            </Nav.Item>
+        </>
+    );
+
     return (
         <Header>
             <FlexboxGrid justify="center" align='middle' className={'adaptive-flex'}>
                 <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
                     <Navbar className={'take-place-header nav-item-style'}>
-                        <Navbar.Header>
-                            <Nav.Item className={'nav-item-style'} onClick={() => navigate('/')}>
-                                <Logo fill={'#141C22'} style={{width: '4em'}}/>
-                                <a className='logo-style'>TAKE PLACE</a>
-                            </Nav.Item>
-                        </Navbar.Header>
+                        <NavHeader />
+
                         <Navbar.Body>
-                            <Nav.Item className={'nav-item-style'} onClick={() => navigate('/explore')}>
-                                Осмотреться
-                            </Nav.Item>
+                            <NavItems />
                         </Navbar.Body>
 
                         <Nav pullRight>
@@ -56,19 +70,12 @@ export default function TakePlaceHeader() {
                     </Navbar>
 
                     <Navbar className={'take-place-header-adaptive nav-item-style'}>
-                        <Navbar.Header>
-                            <Nav.Item className={'nav-item-style'} onClick={() => navigate('/')}>
-                                <Logo fill={'#141C22'} style={{width: '4em'}}/>
-                                <a className='logo-style'>TAKE PLACE</a>
-                            </Nav.Item>
-                        </Navbar.Header>
+                        <NavHeader />
 
                         <Navbar.Body>
                             <Nav pullRight>
                                 <Dropdown title="Меню" placement="bottomEnd">
-                                    <Nav.Item className={'nav-item-style'} onClick={() => navigate('/explore')}>
-                                        Осмотреться
-                                    </Nav.Item>
+                                    <NavItems />
                                     <UserNavPanel />
                                 </Dropdown>
                             </Nav>
