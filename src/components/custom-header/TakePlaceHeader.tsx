@@ -1,8 +1,8 @@
-import React from 'react';
-import { Dropdown, FlexboxGrid, Header, Navbar } from 'rsuite';
+import React, { useState } from 'react';
+import { Dropdown, FlexboxGrid, Header, Navbar, Nav } from 'rsuite';
 import { useNavigate } from 'react-router-dom';
-import Nav from 'rsuite/Nav';
 
+import CreateObjModal from '../create-object-modal/CreateObjModal';
 import { ReactComponent as Logo } from '../../misc/icons/logo.svg';
 import useAuth from '../../hooks/useAuth';
 
@@ -11,6 +11,8 @@ import './TakePlaceHeader.css';
 export default function TakePlaceHeader() {
     const {user} = useAuth();
     const navigate = useNavigate();
+
+    const [newObjModelOpen, setOpenNewObjModal] = useState(false);
 
     const UserNavPanel = () => {
         return user === undefined
@@ -50,11 +52,21 @@ export default function TakePlaceHeader() {
             <Nav.Item className={'nav-item-style'} onClick={() => navigate('/histories')}>
                 Истории
             </Nav.Item>
+            {
+                user !== undefined && (
+                    <Nav.Item onClick={() => {setOpenNewObjModal(true)}}>
+                        Создать объявление
+                    </Nav.Item>
+                )
+            }
         </>
     );
 
     return (
         <Header>
+            <CreateObjModal show={newObjModelOpen} onClose={() => {
+                setOpenNewObjModal(false)
+            }} />
             <FlexboxGrid justify="center" align='middle' className={'adaptive-flex'}>
                 <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
                     <Navbar className={'take-place-header nav-item-style'}>

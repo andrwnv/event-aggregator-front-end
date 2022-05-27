@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
-import { Container, Content, InputPicker, Footer, FlexboxGrid } from 'rsuite';
+import { Container, Content, Footer, FlexboxGrid } from 'rsuite';
 
-import { Countries } from '../../countries';
 import useAuth from '../../hooks/useAuth';
 import EventCard from '../../components/event-card/EventCard';
 import TakePlaceHeader from '../../components/custom-header/TakePlaceHeader';
@@ -25,9 +24,6 @@ export default function MainPage() {
             <Content>
                 <FlexboxGrid justify="center" align='middle' className={'adaptive-flex'}>
                     <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
-                        {/*<InputPicker data={Countries} style={{width: 300}}>*/}
-                        {/*</InputPicker>*/}
-
                         <h3 style={{paddingLeft: '14px', marginTop: '1em', color: '#E3EBF1'}}>
                             Интересное
                         </h3>
