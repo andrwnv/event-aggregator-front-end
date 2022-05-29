@@ -17,9 +17,10 @@ import { Countries } from '../../countries';
 import useAuth from '../../hooks/useAuth';
 
 import './CreateObjModel.css';
-import { CreateEventDTO, CreateObject, CreatePlaceDTO, ObjectTypes } from '../../api/object.api';
-import { PrependParameters } from 'rsuite/esm/@types/utils';
-import { RangeType } from 'rsuite/DatePicker';
+import { CreateEventDTO, CreateObject, CreatePlaceDTO } from '../../api/object.api';
+import { FileType } from 'rsuite/cjs/Uploader/Uploader';
+import { ObjectTypes } from '../../api/const';
+import { UploadObjectImg } from '../../api/upload.api';
 
 type CreateObjModalProps = {
     show: boolean
@@ -44,6 +45,18 @@ type CityType = {
     label: string
 }
 
+function ext(path: string): string {
+    const baseName = path.split(/[\\/]/).pop();
+    if (baseName === undefined)
+        return '';
+
+    const pos = baseName.lastIndexOf('.');
+    if (baseName === '' || pos < 1)
+        return '';
+
+    return baseName.slice(pos + 1);
+}
+
 export default function CreateObjModal(props: CreateObjModalProps) {
     const [uploading, setUploading] = useState(false);
 
@@ -54,6 +67,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
     const [payment, setPayment] = useState(false);
     const [beginDate, setBeginDate] = useState<Date | undefined>(undefined);
     const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+    const [images, setImages] = useState<FileType[]>([]);
 
     const {user} = useAuth();
 
@@ -81,7 +95,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
         let info: CreateEventDTO | CreatePlaceDTO = {
             title: title,
             description: desc,
-            payment_required: payment,
+            payment_need: payment,
             longitude: parseFloat(city!.coords.lon),
             latitude: parseFloat(city!.coords.lat),
             region_id: 'RU'
@@ -94,16 +108,31 @@ export default function CreateObjModal(props: CreateObjModalProps) {
             }
         }
 
-        console.log(info);
-
         setUploading(true);
 
-        CreateObject(info, radioValue as ObjectTypes).then(() => {
-            props.onClose();
-            setTimeout(() => {
-                setUploading(false);
-                toaster.push(InfoMessage, {placement: 'bottomCenter'})
-            }, 300) // !! await close animation end
+        setUploading(false);
+
+        CreateObject(info, radioValue as ObjectTypes).then(res => {
+            const form = new FormData;
+            images.forEach(img => {
+                if (img.blobFile !== undefined)
+                    form.append('files', img.blobFile)
+            })
+
+            UploadObjectImg(form, res.data.result.id, radioValue as ObjectTypes).then(() => {
+                props.onClose();
+                setTimeout(() => {
+                    setUploading(false);
+                    toaster.push(InfoMessage, {placement: 'bottomCenter'})
+                }, 300) // !! await close animation end
+            }).catch(err => {
+                console.log(err)
+                props.onClose();
+                setTimeout(() => {
+                    setUploading(false);
+                    toaster.push(ErrorMessage, {placement: 'bottomCenter'})
+                }, 300) // !! await close animation end
+            });
         }).catch(err => {
             console.log(err)
             props.onClose();
@@ -112,6 +141,10 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                 toaster.push(ErrorMessage, {placement: 'bottomCenter'})
             }, 300) // !! await close animation end
         });
+
+
+        //
+        // UploadObjectImg(form, )
     }
 
     const ModalBodyUpload = () => (
@@ -138,7 +171,14 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                         (
                             <Modal.Body style={{minHeight: '70vh'}} className={'adaptive_modal'}>
                                 <FlexboxGrid align={'middle'} justify={'center'}>
-                                    <Uploader multiple action={''} listType={'picture'}>
+                                    <Uploader multiple action={''} listType={'picture'} onChange={setImages}
+                                              shouldUpload={file => {
+                                                  const exts = ['png', 'jpg', 'jpeg'];
+                                                  if (file.name === undefined)
+                                                      return false;
+                                                  return !exts.includes(ext(file.name));
+                                              }}
+                                    >
                                         <button>
                                             <CameraRetro/>
                                         </button>
@@ -160,7 +200,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                                     {radioValue === 'event' && (
                                         <div>
                                             Укажи даты проведения:
-                                            <DateRangePicker format="dd-MM-yyyy hh:mm"  style={{marginLeft: '15px'}}
+                                            <DateRangePicker format="dd-MM-yyyy hh:mm" style={{marginLeft: '15px'}}
                                                              ranges={[]}
                                                              onOk={(value, event) => {
                                                                  setBeginDate(value[0])
@@ -185,15 +225,13 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                                                  }} value={city?.value}
                                     />
 
-                                    <Input key = 'test1' size="lg" placeholder="Название" style={defaultMargin}
-                                           onChange={(val: string) => {
-                                               setTitle(val);
-                                           }}
+                                    <Input key='test1' size="lg" placeholder="Название" style={defaultMargin}
+                                           onChange={setTitle}
                                     />
 
-                                    <Input key = 'test2' size="lg" as="textarea" placeholder="Описание" rows={8}
+                                    <Input key='test2' size="lg" as="textarea" placeholder="Описание" rows={8}
                                            style={{...textareaStyle, ...defaultMargin}}
-                                           onChange={(v) => setDesc(v)}
+                                           onChange={setDesc}
                                     />
 
                                     <button className={"reg-button-base"}
@@ -217,7 +255,6 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                             </Modal.Body>
                         )
                     }
-
                     <Modal.Footer></Modal.Footer>
                 </Modal.Header>
             </Modal>

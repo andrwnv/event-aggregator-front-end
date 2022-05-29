@@ -11,7 +11,14 @@ type EventCardProps = {
     shortText: string;
     location: string;
     pictureLinks: string[];
+    dates: Date[]
 };
+
+function datesToString(dates: Date[]): string {
+    if (dates.length < 2)
+        return '';
+    return `${dates[0].getDay()}/${dates[0].getMonth()}/${dates[0].getFullYear()} - ${dates[1].getDay()}/${dates[1].getMonth()}/${dates[1].getFullYear()}`
+}
 
 export default function EventCard(props: EventCardProps) {
     const [liked, setLike] = useState(false);
@@ -32,7 +39,6 @@ export default function EventCard(props: EventCardProps) {
                     placement={'bottom'}
                     autoplay={true}
                     autoplayInterval={5000}
-                    // className={'event-card-root'}
                 >
                     {props.pictureLinks.map(link => {
                         return (
@@ -59,7 +65,12 @@ export default function EventCard(props: EventCardProps) {
 
             <FlexboxGrid align={'middle'} justify={'start'} style={{width: '100%', height: '20vh'}}>
                 <div className={'event-card-second-text text-primary-color'}>
-                    {props.shortText}
+                        <div>
+                            {props.dates.length >= 2 &&
+                                <div>{datesToString(props.dates)} <br/></div>
+                            }
+                            {props.shortText}
+                        </div>
                 </div>
             </FlexboxGrid>
 
