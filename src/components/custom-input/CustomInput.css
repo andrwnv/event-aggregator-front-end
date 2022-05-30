@@ -1,34 +1,33 @@
-
 .custom-input-container {
-    border: 1px solid #141C22;
-    border-radius: 0.5vh;
+  border: 1px solid #141c22;
+  border-radius: 0.5vh;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    width: 100%;
-    font-size: 0.9em;
+  width: 100%;
+  font-size: 0.9em;
 
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 
-    padding: 14px;
+  padding: 14px;
 }
 
 .custom-input-container:focus-within {
-    background-color: #141C22;
-    color: #D1D5D8;
+  background-color: #141c22;
+  color: #d1d5d8;
 }
 
 .custom-input {
-    all: unset;
-    margin-bottom: 5px;
-    padding-right: 10px;
+  all: unset;
+  margin-bottom: 5px;
+  padding-right: 10px;
 }
 
 .custom-input::placeholder {
-    color: #141C22;
+  color: #141c22;
 }
 
 .custom-input-container-error {
-    border: 1px solid #b21762;
+  border: 1px solid #b21762;
 }
