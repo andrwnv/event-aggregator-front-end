@@ -1,79 +1,79 @@
 .event-card-root {
-  background-color: #e3ebf1;
-  border-radius: 7px;
+    background-color: #E3EBF1;
+    border-radius: 7px;
 
-  box-shadow: 0 4px 15px rgba(227, 235, 241, 0.24);
-  width: 100%;
+    box-shadow: 0 4px 15px rgba(227, 235, 241, 0.24);
+    width: 100%;
 }
 
 .event-card-root > * {
-  padding: 17px;
+    padding: 17px;
 }
 
 .event-card-img {
-  height: auto !important;
-  object-fit: contain;
-  max-width: 100vw;
+    height: auto !important;
+    object-fit: contain;
+    max-width:100vw;
 }
 
 .rs-carousel-content {
-  height: 50%;
+    height: 50%;
 }
 
 .text-primary-color {
-  color: #141c22;
+    color: #141C22;
 }
 
 .event-card-title {
-  font-size: 2em;
-  font-weight: 600;
+    font-size: 2em;
+    font-weight: 600;
 }
 
 .event-card-second-text {
-  display: flex;
-  white-space: initial;
-  text-align: left;
-  font-size: 1.3em;
-  font-weight: 500;
-  overflow: scroll;
-  height: 100%;
+    display: flex;
+    white-space: initial;
+    text-align: left;
+    font-size: 1.3em;
+    font-weight: 500;
+    overflow: scroll;
+    height: 100%;
 }
 
 .event-card-second-text::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .event-card-second-text {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
 }
 
 .event-card-button {
-  justify-content: center;
-  align-content: center;
+    justify-content: center;
+    align-content: center;
 
-  background-color: #273540;
-  border-radius: 3px;
+    background-color: #273540;
+    border-radius: 3px;
 
-  /*padding: 10px 0;*/
-  width: 45%;
-  height: 5vh;
+    /*padding: 10px 0;*/
+    width: 45%;
+    height: 5vh;
 
-  font-weight: 500;
-  font-size: 1.3em;
-  color: #e3ebf1;
+    font-weight: 500;
+    font-size: 1.3em;
+    color: #E3EBF1;
 
-  transition: transform 0.2s;
+    transition: transform .2s;
 }
 
 .event-card-button:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
 }
 
 @media screen and (max-width: 450px) {
-  .event-card-img {
-    object-fit: fill;
-    height: 100% !important;
-  }
+    .event-card-img {
+        object-fit: fill;
+        height: 100% !important;
+    }
 }

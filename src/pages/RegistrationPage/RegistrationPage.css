@@ -1,61 +1,57 @@
 .root-container-reg {
-  background-color: #141c22;
-  min-height: 100vh;
+    background-color: #141C22;
+    min-height: 100vh;
 
-  background-image: url('../misc/resources/background-figures.png');
-  background-size: cover;
+    background-image: url('../misc/resources/background-figures.png');
+    background-size: cover;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  font-family: Montserrat, serif;
+    font-family: Montserrat, serif;
 }
 
 .reg-form {
-  background: linear-gradient(
-    107.02deg,
-    rgba(214, 217, 220, 0.65) 15.35%,
-    rgba(117, 152, 179, 0.65) 100%
-  );
-  box-shadow: 0 4px 13px rgba(207, 211, 215, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 21px;
-  padding: 6vh;
+    background: linear-gradient(107.02deg, rgba(214, 217, 220, 0.65) 15.35%, rgba(117, 152, 179, 0.65) 100%);
+    box-shadow: 0 4px 13px rgba(207, 211, 215, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 21px;
+    padding: 6vh;
 
-  max-width: 30vw;
+    max-width: 30vw;
 }
 
 @media screen and (max-width: 1000px) {
-  .reg-form {
-    max-width: 70vw;
-  }
+    .reg-form {
+        max-width: 70vw;
+    }
 }
 
 @media screen and (max-width: 450px) {
-  .reg-form {
-    max-width: 100%;
-  }
+    .reg-form {
+        max-width: 100%;
+    }
 }
 
 .default-bottom-margin {
-  margin-bottom: 2vh;
+    margin-bottom: 2vh;
 }
 
 .reg-button-base {
-  background: none;
-  color: inherit;
-  border: none;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
+    background: none;
+    color: inherit;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
 
-  padding: 17px;
-  border-radius: 1vh;
+    padding: 17px;
+    border-radius: 1vh;
 
-  transition: transform 0.2s;
+    transition: transform .2s;
 }
 
 .reg-button-base:hover {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }

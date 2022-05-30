@@ -1,24 +1,25 @@
 .adaptive_modal {
+
 }
 
 @media screen and (max-width: 1000px) {
-  .adaptive_modal {
-    max-width: 70vw;
-    overflow: unset !important;
-  }
+    .adaptive_modal {
+        max-width: 70vw;
+        overflow: unset !important;
+    }
 
-  * > .rs-modal-wrapper {
-    overflow: unset !important;
-  }
+    * > .rs-modal-wrapper {
+        overflow: unset !important;
+    }
 }
 
 @media screen and (max-width: 450px) {
-  .adaptive_modal {
-    max-width: 100%;
-    overflow: unset !important;
-  }
+    .adaptive_modal {
+        max-width: 100%;
+        overflow: unset !important;
+    }
 
-  * > .rs-modal-wrapper {
-    overflow: unset !important;
-  }
+    * > .rs-modal-wrapper {
+        overflow: unset !important;
+    }
 }

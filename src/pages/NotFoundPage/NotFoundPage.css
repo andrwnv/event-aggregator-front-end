@@ -1,29 +1,25 @@
 .root-container {
-  background-color: #141c22;
-  background-image: url('../misc/resources/background-figures.png');
-  background-size: cover;
+    background-color: #141C22;
+    background-image: url('../misc/resources/background-figures.png');
+    background-size: cover;
 }
 
 .form {
-  background: linear-gradient(
-    107.02deg,
-    rgba(214, 217, 220, 0.65) 15.35%,
-    rgba(117, 152, 179, 0.65) 100%
-  );
-  box-shadow: 0 4px 13px rgba(207, 211, 215, 0.1);
-  backdrop-filter: blur(20px);
-  border-radius: 10px;
-  width: 60vw;
-  height: 40vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  font-weight: 600;
-  flex-direction: column;
-  padding: 100px;
+    background: linear-gradient(107.02deg, rgba(214, 217, 220, 0.65) 15.35%, rgba(117, 152, 179, 0.65) 100%);
+    box-shadow: 0 4px 13px rgba(207, 211, 215, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 10px;
+    width: 60vw;
+    height: 40vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: 600;
+    flex-direction: column;
+    padding: 100px;
 }
 
 .not-found {
-  font-size: 10vh;
+    font-size: 10vh;
 }
