@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react'
-import { Container, FlexboxGrid } from 'rsuite'
+import { Container, Content, FlexboxGrid } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
 import useAuth from '../../hooks/useAuth'
