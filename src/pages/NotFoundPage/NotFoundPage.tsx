@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Container, Content, FlexboxGrid, Header } from 'rsuite'
+import { Container, Content, FlexboxGrid } from 'rsuite'
 import { useNavigate } from 'react-router-dom'
 
 import './NotFoundPage.css'
