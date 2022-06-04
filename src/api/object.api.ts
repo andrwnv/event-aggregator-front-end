@@ -24,8 +24,8 @@ export type CreateEventDTO = {
 };
 
 export type ObjectRegion = {
-    RegionId: string,
-    RegionName: string
+    region_id: string,
+    region_name: string
 }
 
 export type PhotoURL = string;

@@ -17,7 +17,7 @@ export default function MainPage() {
 
     const [objects, setObjects] = useState<ObjectData[]>([]);
 
-    const {user} = useAuth();
+    // const {user} = useAuth();
     const {events} = useDraggable(ref, {
         applyRubberBandEffect: true,
     });
@@ -62,7 +62,7 @@ export default function MainPage() {
                                         <div className={'scroll-item scroll-item-sizes'} id={`${item.id}_root`}>
                                             <EventCard id={item.id} title={item.title}
                                                        shortText={item.description}
-                                                       location={`${item.latitude} ${item.longitude}`}
+                                                       location={item.region_info.region_name}
                                                        pictureLinks={imgUrls} dates={dates}
                                             />
                                         </div>
