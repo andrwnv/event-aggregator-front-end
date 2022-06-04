@@ -11,6 +11,5 @@ type AsyncRouteProps = RouteProps;
 
 export default function AuthenticatedRoute(props: AsyncRouteProps) {
     const { user } = useAuth();
-    console.log(user);
     return !user ? <Navigate to="/" /> : <Route {...props} />;
 }

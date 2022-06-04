@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react'
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
 
 import { GeoPoint } from '../../misc/GeoPoint';
@@ -9,6 +9,8 @@ type ClickableMapInfo = {
 
     eventsPositions?: GeoPoint[];
     placesPositions?: GeoPoint[];
+
+    style?: CSSProperties;
 };
 
 function ClickableMapComponent(props: ClickableMapInfo) {
@@ -45,6 +47,7 @@ function ClickableMapComponent(props: ClickableMapInfo) {
         <MapContainer
             center={selectedPosition || initialPosition}
             zoom={12}
+            style={props?.style}
         >
             <Markers />
 

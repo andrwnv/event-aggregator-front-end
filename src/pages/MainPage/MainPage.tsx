@@ -30,7 +30,6 @@ export default function MainPage() {
         });
     }, [])
 
-    console.log(user);
     return (
         <Container className={'main-page-root'}>
             <TakePlaceHeader/>
@@ -54,7 +53,6 @@ export default function MainPage() {
 
                                     let dates: Date[] = []
                                     if (item.begin_date !== undefined && item.end_date !== undefined) {
-                                        console.log(item)
                                         dates.push(
                                             new Date(item.begin_date * 1000),
                                             new Date(item.end_date * 1000));

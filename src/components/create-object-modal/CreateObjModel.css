@@ -4,8 +4,10 @@
 
 @media screen and (max-width: 1000px) {
     .adaptive_modal {
-        max-width: 70vw;
-        overflow: unset !important;
+        margin-top: 0;
+        max-width: 100%;
+        max-height: 100%;
+        overflow: auto !important;
     }
 
     * > .rs-modal-wrapper {
@@ -15,8 +17,10 @@
 
 @media screen and (max-width: 450px) {
     .adaptive_modal {
+        margin-top: 0;
         max-width: 100%;
-        overflow: unset !important;
+        max-height: 100%;
+        overflow: auto !important;
     }
 
     * > .rs-modal-wrapper {
