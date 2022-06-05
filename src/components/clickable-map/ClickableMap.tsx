@@ -1,11 +1,13 @@
 import React, { CSSProperties, useEffect, useState } from 'react'
-import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet';
+import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
 
-import { GeoPoint } from '../../misc/GeoPoint';
+import { GeoPoint } from '../../misc/GeoPoint'
 
 type ClickableMapInfo = {
     defaultCoord: GeoPoint;
     handler: (point: GeoPoint) => void;
+
+    selectedCoords?: GeoPoint;
 
     eventsPositions?: GeoPoint[];
     placesPositions?: GeoPoint[];
@@ -14,25 +16,28 @@ type ClickableMapInfo = {
 };
 
 function ClickableMapComponent(props: ClickableMapInfo) {
-    const [initialPosition, setInitialPosition] = useState<[number, number]>([props.defaultCoord.lat, props.defaultCoord.lon]);
-    const [selectedPosition, setSelectedPosition] = useState<[number, number]>([props.defaultCoord.lat, props.defaultCoord.lon]);
+    const [initialPosition, setInitialPosition] = useState<[number, number]>([props.defaultCoord.lat, props.defaultCoord.lon])
+    const [selectedPosition, setSelectedPosition] = useState<[number, number]>(
+        props.selectedCoords === undefined ? [props.defaultCoord.lat, props.defaultCoord.lon]
+            : [props.selectedCoords.lat, props.selectedCoords.lon],
+    )
 
     useEffect(() => {
         navigator.geolocation.getCurrentPosition(position => {
-            const { latitude, longitude } = position.coords;
-            setInitialPosition([latitude, longitude]);
-        });
-    }, []);
+            const { latitude, longitude } = position.coords
+            setInitialPosition([latitude, longitude])
+        })
+    }, [])
 
     const Markers = () => {
         useMapEvents({
             click(e) {
-                const coords = e.latlng;
-                props.handler({lat: coords.lat, lon: coords.lng})
+                const coords = e.latlng
+                props.handler({ lat: coords.lat, lon: coords.lng })
                 setSelectedPosition([
-                    e.latlng.lat,
-                    e.latlng.lng
-                ]);
+                    coords.lat,
+                    coords.lng,
+                ])
             },
         })
 
@@ -40,12 +45,12 @@ function ClickableMapComponent(props: ClickableMapInfo) {
             key={selectedPosition[0]}
             position={selectedPosition}
             interactive={false}
-        /> : null )
+        /> : null)
     }
 
-    return(
+    return (
         <MapContainer
-            center={selectedPosition || initialPosition}
+            center={initialPosition}
             zoom={12}
             style={props?.style}
         >
@@ -73,10 +78,10 @@ function ClickableMapComponent(props: ClickableMapInfo) {
 
             <TileLayer
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
         </MapContainer>
     )
 }
 
-export default ClickableMapComponent;
+export default ClickableMapComponent

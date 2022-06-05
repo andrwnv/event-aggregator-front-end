@@ -56,8 +56,7 @@
     background-color: #273540;
     border-radius: 3px;
 
-    /*padding: 10px 0;*/
-    width: 45%;
+    min-width: 45%;
     height: 5vh;
 
     font-weight: 500;
@@ -65,6 +64,10 @@
     color: #E3EBF1;
 
     transition: transform .2s;
+}
+
+.event-card-long {
+    min-width: 100%;
 }
 
 .event-card-button:hover {

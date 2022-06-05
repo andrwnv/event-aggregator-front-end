@@ -1,7 +1,7 @@
-import axios, { AxiosPromise } from 'axios';
-import { ObjectTypes, templateURL_V1 } from './const';
-import { authHeader } from './auth/auth.header';
-import { User } from '../types/user.type';
+import axios, { AxiosPromise } from 'axios'
+import { ObjectTypes, templateURL_V1 } from './const'
+import { authHeader } from './auth/auth.header'
+import { User } from '../types/user.type'
 
 export type CreatePlaceDTO = {
     title: string,
@@ -41,7 +41,8 @@ export type ObjectData = {
     latitude: number,
     region_info: ObjectRegion,
     created_by: User,
-    photos?: PhotoURL[]
+    photos?: PhotoURL[],
+    liked?: boolean
 }
 
 export const CreateObject = (info: CreateEventDTO | CreatePlaceDTO, type: ObjectTypes): AxiosPromise => {
@@ -49,21 +50,21 @@ export const CreateObject = (info: CreateEventDTO | CreatePlaceDTO, type: Object
         method: 'POST',
         url: `${templateURL_V1}/${type}/create`,
         data: info,
-        headers: authHeader()
-    });
+        headers: authHeader(),
+    })
 }
 
 export const GetObjects = async (page: number, count: number, type: ObjectTypes): Promise<ObjectData[]> => {
     try {
         const data = await axios({
             method: 'GET',
-            url: `${templateURL_V1}/${type}/consume/${page}/${count}`
-        });
+            url: `${templateURL_V1}/${type}/consume/${page}/${count}`,
+        })
 
         return [
-            ...data.data.result
+            ...data.data.result,
         ]
     } catch (err) {
-        return [];
+        return []
     }
 }

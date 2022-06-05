@@ -70,10 +70,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
     const [beginDate, setBeginDate] = useState<Date | undefined>(undefined)
     const [endDate, setEndDate] = useState<Date | undefined>(undefined)
     const [images, setImages] = useState<FileType[]>([])
-    const [coords, setCoords] = useState<GeoPoint>({
-        lat: 55.755793,
-        lon: 37.617134,
-    });
+    const [coords, setCoords] = useState<GeoPoint | undefined>()
 
     const { user } = useAuth()
 
@@ -100,9 +97,9 @@ export default function CreateObjModal(props: CreateObjModalProps) {
             title: title,
             description: desc,
             payment_need: payment,
-            longitude: parseFloat(city!.coords.lon),
-            latitude: parseFloat(city!.coords.lat),
-            region_id: 'RU',
+            longitude: coords!.lon,
+            latitude: coords!.lat,
+            region_id: city!.label,
         }
         if (radioValue === 'event') {
             info = {
@@ -113,8 +110,6 @@ export default function CreateObjModal(props: CreateObjModalProps) {
         }
 
         setUploading(true)
-
-        setUploading(false)
 
         CreateObject(info, radioValue as ObjectTypes).then(res => {
             const form = new FormData
@@ -157,10 +152,13 @@ export default function CreateObjModal(props: CreateObjModalProps) {
 
     const MapComponent = useCallback(() => (
         <ClickableMapComponent
-            defaultCoord={coords}
+            defaultCoord={city === undefined ? { lat: 55.755793, lon: 37.617134} : {lat: parseFloat(city.coords.lat), lon: parseFloat(city.coords.lon)}}
+            selectedCoords={coords === undefined ?
+                { lat: 55.755793, lon: 37.617134 } : { lat: coords.lat, lon: coords.lon }}
             handler={
                 (point: GeoPoint) => {
                     alert(`${point.lat} ${point.lon}`)
+                    setCoords(point)
                 }
             }
             style={{
@@ -168,7 +166,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                 marginBottom: '2em',
             }}
         />
-    ), [coords]);
+    ), [coords, city])
 
     return (
         <FlexboxGrid className={'adaptive_modal'}>
@@ -239,7 +237,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                                                      setCity(item as CityType)
                                                      setCoords({
                                                          lat: parseFloat(item.coords.lat),
-                                                         lon: parseFloat(item.coords.lon)
+                                                         lon: parseFloat(item.coords.lon),
                                                      })
                                                  }} value={city?.value}
                                     />

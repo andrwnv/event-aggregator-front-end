@@ -1,43 +1,47 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Container, Content, FlexboxGrid, Footer } from 'rsuite';
+import React, { useEffect, useRef, useState } from 'react'
+import { Container, Content, FlexboxGrid, Footer } from 'rsuite'
 
-import useAuth from '../../hooks/useAuth';
-import EventCard from '../../components/event-card/EventCard';
-import TakePlaceHeader from '../../components/custom-header/TakePlaceHeader';
-import { useDraggable } from 'react-use-draggable-scroll';
+import useAuth from '../../hooks/useAuth'
+import EventCard from '../../components/event-card/EventCard'
+import TakePlaceHeader from '../../components/custom-header/TakePlaceHeader'
+import { useDraggable } from 'react-use-draggable-scroll'
 
-import { GetObjects, ObjectData } from '../../api/object.api';
-import { ObjectTypes, templateURL_V1 } from '../../api/const';
+import { IsLiked } from '../../api/like.api'
+import { GetObjects, ObjectData } from '../../api/object.api'
+import { ObjectTypes, templateURL_V1 } from '../../api/const'
 
-import './MainPage.css';
-
+import './MainPage.css'
 
 export default function MainPage() {
-    const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>;
+    const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
 
-    const [objects, setObjects] = useState<ObjectData[]>([]);
+    const [objects, setObjects] = useState<ObjectData[]>([])
 
     // const {user} = useAuth();
-    const {events} = useDraggable(ref, {
+    const { events } = useDraggable(ref, {
         applyRubberBandEffect: true,
-    });
+    })
 
     useEffect(() => {
-        GetObjects(1, 10, ObjectTypes.PLACE).then(places => {
-            GetObjects(1, 10, ObjectTypes.EVENT).then(events => {
-                setObjects([...places, ...events]);
-            });
-        });
+        GetObjects(1, 5, ObjectTypes.PLACE).then(places => {
+            GetObjects(1, 5, ObjectTypes.EVENT).then(async events => {
+                let objs = [...places, ...events]
+                for (let object of objs) {
+                    object.liked = await IsLiked(object.id)
+                }
+                setObjects(objs)
+            })
+        })
     }, [])
 
     return (
         <Container className={'main-page-root'}>
-            <TakePlaceHeader/>
+            <TakePlaceHeader />
 
             <Content>
-                <FlexboxGrid justify="center" align='middle' className={'adaptive-flex'}>
+                <FlexboxGrid justify='center' align='middle' className={'adaptive-flex'}>
                     <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
-                        <h3 style={{paddingLeft: '14px', marginTop: '1em', color: '#E3EBF1'}}>
+                        <h3 style={{ paddingLeft: '14px', marginTop: '1em', color: '#E3EBF1' }}>
                             Интересное
                         </h3>
 
@@ -45,9 +49,9 @@ export default function MainPage() {
                             {
                                 objects.map((item: ObjectData) => {
                                     if (item.photos === null || item.photos === undefined)
-                                        return <></>;
+                                        return <></>
 
-                                    let imgUrls = [];
+                                    let imgUrls = []
                                     for (const img of item.photos)
                                         imgUrls.push(`${templateURL_V1}/file/img/${img}?uuid=${item.created_by.id}`)
 
@@ -55,18 +59,18 @@ export default function MainPage() {
                                     if (item.begin_date !== undefined && item.end_date !== undefined) {
                                         dates.push(
                                             new Date(item.begin_date * 1000),
-                                            new Date(item.end_date * 1000));
+                                            new Date(item.end_date * 1000))
                                     }
-
                                     return (
                                         <div className={'scroll-item scroll-item-sizes'} id={`${item.id}_root`}>
                                             <EventCard id={item.id} title={item.title}
                                                        shortText={item.description}
                                                        location={item.region_info.region_name}
                                                        pictureLinks={imgUrls} dates={dates}
+                                                       liked={item.liked === undefined ? false : item.liked}
                                             />
                                         </div>
-                                    );
+                                    )
                                 })
 
                                 // [1, 2, 3, 4, 5].map(() => {
@@ -92,5 +96,5 @@ export default function MainPage() {
 
             </Footer>
         </Container>
-    );
+    )
 }
