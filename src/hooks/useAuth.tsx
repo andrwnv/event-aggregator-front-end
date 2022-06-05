@@ -1,14 +1,14 @@
-import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 
-import { AxiosResponse } from 'axios';
-import { useNavigate, useLocation } from "react-router-dom";
+import { AxiosResponse } from 'axios'
+import { useNavigate, useLocation } from 'react-router-dom'
 
-import { User, LogInDto, LoginResult } from '../types/user.type';
-import { Login, Me } from '../api/auth/auth.api';
+import { User, LogInDto, LoginResult } from '../types/user.type'
+import { Login, Me } from '../api/auth/auth.api'
 
 
 export interface AuthContextType {
-    user: User;
+    user?: User;
     loading: boolean;
     error?: AxiosResponse;
     login: (dto: LogInDto) => void;
@@ -16,48 +16,51 @@ export interface AuthContextType {
     me: () => void;
 }
 
-const AuthContext = createContext({} as AuthContextType);
+const AuthContext = createContext({} as AuthContextType)
 
-export function AuthProvider({children} : { children: ReactNode }): JSX.Element {
-    const [user, setUser] = useState<User>();
-    const [error, setError] = useState<AxiosResponse | undefined>();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
-    const navigate = useNavigate();
-    const location = useLocation();
+export function AuthProvider({ children }: { children: ReactNode }): JSX.Element {
+    const [user, setUser] = useState<User | undefined>()
+    const [error, setError] = useState<AxiosResponse | undefined>()
+    const [loading, setLoading] = useState<boolean>(false)
+    const [loadingInitial, setLoadingInitial] = useState<boolean>(true)
+    const navigate = useNavigate()
+    const location = useLocation()
 
     useEffect(() => {
         if (error)
-            setError(undefined);
-    }, [location.pathname]);
+            setError(undefined)
+    }, [location.pathname])
 
     useEffect(() => {
-        me();
+        me()
     }, [])
 
     function me() {
+        if (user !== undefined)
+            return
+
         Me().then(user => setUser(user))
             .catch(err => {
                 setError(err.response)
             })
-            .finally(() => setLoadingInitial(false));
+            .finally(() => setLoadingInitial(false))
     }
 
     function login(dto: LogInDto) {
-        setLoading(true);
+        setLoading(true)
 
         Login(dto).then((res: LoginResult) => {
-            localStorage.setItem('api-key', res.token);
-            me();
-            navigate('/', {replace: true});
+            localStorage.setItem('api-key', res.token)
+            me()
+            navigate('/', { replace: true })
         })
             .catch(err => setError(err.response))
-            .finally(() => setLoading(false));
+            .finally(() => setLoading(false))
     }
 
     function logout() {
         // todo(andrwnv): api logout
-        localStorage.removeItem('api-key');
+        localStorage.removeItem('api-key')
     }
 
     const memValue = useMemo(
@@ -67,8 +70,8 @@ export function AuthProvider({children} : { children: ReactNode }): JSX.Element 
             error,
             login,
             logout,
-            me
-        } as AuthContextType), [user, loading, error]
+            me,
+        } as AuthContextType), [user, loading, error],
     )
 
     return (
@@ -79,5 +82,5 @@ export function AuthProvider({children} : { children: ReactNode }): JSX.Element 
 }
 
 export default function useAuth(): AuthContextType {
-    return useContext(AuthContext);
+    return useContext(AuthContext)
 }
