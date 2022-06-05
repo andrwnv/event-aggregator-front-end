@@ -14,10 +14,9 @@ import './MainPage.css'
 
 export default function MainPage() {
     const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
-
     const [objects, setObjects] = useState<ObjectData[]>([])
+    const { user } = useAuth()
 
-    // const {user} = useAuth();
     const { events } = useDraggable(ref, {
         applyRubberBandEffect: true,
     })
@@ -26,8 +25,10 @@ export default function MainPage() {
         GetObjects(1, 5, ObjectTypes.PLACE).then(places => {
             GetObjects(1, 5, ObjectTypes.EVENT).then(async events => {
                 let objs = [...places, ...events]
-                for (let object of objs) {
-                    object.liked = await IsLiked(object.id)
+                if (user !== undefined) {
+                    for (let object of objs) {
+                        object.liked = await IsLiked(object.id)
+                    }
                 }
                 setObjects(objs)
             })
@@ -61,6 +62,7 @@ export default function MainPage() {
                                             new Date(item.begin_date * 1000),
                                             new Date(item.end_date * 1000))
                                     }
+
                                     return (
                                         <div className={'scroll-item scroll-item-sizes'} id={`${item.id}_root`}>
                                             <EventCard id={item.id} title={item.title}
