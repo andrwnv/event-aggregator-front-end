@@ -60,7 +60,7 @@ export default function EventCard(props: EventCardProps) {
                 >
                     {props.pictureLinks.map(link => {
                         return (
-                            <img src={link} className={'event-card-img'} alt={`${props.title}.img`} />
+                            <img src={link} className={'event-card-img'} alt={`${props.title}.img`} key={`${link}_image`}/>
                         )
                     })}
                 </Carousel>

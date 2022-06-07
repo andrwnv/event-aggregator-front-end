@@ -50,6 +50,7 @@ function ClickableMapComponent(props: ClickableMapInfo) {
 
     return (
         <MapContainer
+            key={'clickable-map-container'}
             center={[initialPosition.lat, initialPosition.lon]}
             zoom={12}
             style={props?.style}
@@ -59,7 +60,7 @@ function ClickableMapComponent(props: ClickableMapInfo) {
             {
                 props.eventsPositions?.map(item => (
                     <Marker
-                        key={1}
+                        key={`${item.lat}_${item.lon}`}
                         position={[item.lat, item.lon]}
                         interactive={false}
                     />

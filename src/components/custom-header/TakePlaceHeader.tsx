@@ -38,8 +38,8 @@ export default function TakePlaceHeader() {
     const NavHeader = () => (
         <Navbar.Header>
             <Nav.Item className={'nav-item-style'} onClick={() => navigate('/')}>
-                <Logo fill={'#141C22'} style={{width: '4em'}}/>
-                <a className='logo-style'>TAKE PLACE</a>
+                <Logo fill={'#141C22'} style={{width: '4em'}} />
+                <div className='logo-style'>TAKE PLACE</div>
             </Nav.Item>
         </Navbar.Header>
     );

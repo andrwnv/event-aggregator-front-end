@@ -64,7 +64,7 @@ export default function MainPage() {
                                     }
 
                                     return (
-                                        <div className={'scroll-item scroll-item-sizes'} id={`${item.id}_root`}>
+                                        <div className={'scroll-item scroll-item-sizes'} id={`${item.id}_root`} key={`${item.id}_root`}>
                                             <EventCard id={item.id} title={item.title}
                                                        shortText={item.description}
                                                        location={item.region_info.region_name}

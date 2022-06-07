@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
 
-import 'rsuite/dist/rsuite.min.css';
-import './index.css';
+import 'rsuite/dist/rsuite.min.css'
+import './index.css'
 import './fonts.css'
 
 /*
@@ -32,7 +32,8 @@ async function initCountries() {
 initCountries().then(() => {console.log("CITIES INIT SUCCESS")});
  */
 
-ReactDOM.render(
-    <App/>,
-    document.getElementById('root')
-);
+const rootElement = document.getElementById('root')
+const root = ReactDOM.createRoot(rootElement!)
+root.render(
+    <App />,
+)
