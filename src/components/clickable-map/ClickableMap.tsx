@@ -16,18 +16,18 @@ type ClickableMapInfo = {
 };
 
 function ClickableMapComponent(props: ClickableMapInfo) {
-    const [initialPosition, setInitialPosition] = useState<[number, number]>([props.defaultCoord.lat, props.defaultCoord.lon])
+    const [initialPosition, setInitialPosition] = useState<GeoPoint>(props.defaultCoord)
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>(
         props.selectedCoords === undefined ? [props.defaultCoord.lat, props.defaultCoord.lon]
             : [props.selectedCoords.lat, props.selectedCoords.lon],
     )
 
-    useEffect(() => {
-        navigator.geolocation.getCurrentPosition(position => {
-            const { latitude, longitude } = position.coords
-            setInitialPosition([latitude, longitude])
-        })
-    }, [])
+    // useEffect(() => {
+    //     navigator.geolocation.getCurrentPosition(position => {
+    //         const { latitude, longitude } = position.coords
+    //         setInitialPosition({lat: latitude, lon: longitude})
+    //     })
+    // }, [initialPosition])
 
     const Markers = () => {
         useMapEvents({
@@ -50,7 +50,7 @@ function ClickableMapComponent(props: ClickableMapInfo) {
 
     return (
         <MapContainer
-            center={initialPosition}
+            center={[initialPosition.lat, initialPosition.lon]}
             zoom={12}
             style={props?.style}
         >

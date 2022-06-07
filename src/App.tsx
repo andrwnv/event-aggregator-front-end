@@ -6,7 +6,6 @@ import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import RegistrationConfirmPage from './pages/RegistrationPage/RegistrationConfirmPage/RegistrationConfirmPage';
 import ExplorePage from './pages/ExplorePage/ExplorePage';
 import MainPage from './pages/MainPage/MainPage';
-import AuthenticatedRoute from './components/custom-roures/AuthenticatedRoute';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
 
 import './App.css'

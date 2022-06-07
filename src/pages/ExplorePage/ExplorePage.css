@@ -1,0 +1,14 @@
+.explore-header {
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    height: 56px;
+    background: #141C22;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.explore-header:hover {
+    cursor: pointer;
+}
