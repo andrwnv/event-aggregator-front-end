@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react'
+import React, { CSSProperties, useState } from 'react'
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
 
 import { GeoPoint } from '../../misc/GeoPoint'
@@ -21,13 +21,6 @@ function ClickableMapComponent(props: ClickableMapInfo) {
         props.selectedCoords === undefined ? [props.defaultCoord.lat, props.defaultCoord.lon]
             : [props.selectedCoords.lat, props.selectedCoords.lon],
     )
-
-    // useEffect(() => {
-    //     navigator.geolocation.getCurrentPosition(position => {
-    //         const { latitude, longitude } = position.coords
-    //         setInitialPosition({lat: latitude, lon: longitude})
-    //     })
-    // }, [initialPosition])
 
     const Markers = () => {
         useMapEvents({
