@@ -32,18 +32,17 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     }, [location.pathname])
 
     useEffect(() => {
-        me()
+        if (user === undefined)
+            me()
     }, [])
 
     function me() {
-        if (user !== undefined)
-            return
-
-        Me().then(user => setUser(user))
-            .catch(err => {
-                setError(err.response)
-            })
-            .finally(() => setLoadingInitial(false))
+        Me().then(updated => {
+            setUser(updated)
+            console.log(updated)
+        }).catch(err => {
+            setError(err.response)
+        }).finally(() => setLoadingInitial(false))
     }
 
     function login(dto: LogInDto) {
@@ -53,14 +52,15 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
             localStorage.setItem('api-key', res.token)
             me()
             navigate('/', { replace: true })
-        })
-            .catch(err => setError(err.response))
-            .finally(() => setLoading(false))
+        }).catch(err => setError(err.response)).finally(() => setLoading(false))
     }
 
     function logout() {
-        // todo(andrwnv): api logout
         localStorage.removeItem('api-key')
+        setUser(undefined)
+        setError(undefined)
+
+        navigate('/', { replace: true })
     }
 
     const memValue = useMemo(

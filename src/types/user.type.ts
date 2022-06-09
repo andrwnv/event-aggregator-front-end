@@ -1,12 +1,10 @@
-import uuid from 'uuid';
-
 export type User = {
-    id: typeof uuid.v4;
+    id: string;
     firstName: string;
     secondName: string;
     email: string;
     verified: boolean;
-    photoURL: string;
+    photoURL?: string;
 }
 
 export type LogInDto = {
