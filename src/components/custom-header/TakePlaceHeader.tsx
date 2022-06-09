@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Dropdown, FlexboxGrid, Header, Navbar, Nav } from 'rsuite';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Dropdown, FlexboxGrid, Header, Navbar, Nav } from 'rsuite'
+import { useNavigate } from 'react-router-dom'
 
-import CreateObjModal from '../create-object-modal/CreateObjModal';
-import { ReactComponent as Logo } from '../../misc/icons/logo.svg';
-import useAuth from '../../hooks/useAuth';
+import CreateObjModal from '../create-object-modal/CreateObjModal'
+import { ReactComponent as Logo } from '../../misc/icons/logo.svg'
+import useAuth from '../../hooks/useAuth'
 
-import './TakePlaceHeader.css';
+import './TakePlaceHeader.css'
 
 export default function TakePlaceHeader() {
-    const {user} = useAuth();
-    const navigate = useNavigate();
+    const { user } = useAuth()
+    const navigate = useNavigate()
 
-    const [newObjModelOpen, setOpenNewObjModal] = useState(false);
+    const [newObjModelOpen, setOpenNewObjModal] = useState(false)
 
     const UserNavPanel = () => {
         return user === undefined
@@ -29,20 +29,21 @@ export default function TakePlaceHeader() {
                 </>
             )
             : (
-                <Nav.Item className={'nav-item-style'}>
+                <Nav.Item className={'nav-item-style'}
+                          onClick={() => navigate('/profile/me')}>
                     Мой аккаунт
                 </Nav.Item>
             )
     }
 
     const NavHeader = () => (
-        <Navbar.Header>
+        <Navbar.Brand style={{ padding: 0 }}>
             <Nav.Item className={'nav-item-style'} onClick={() => navigate('/')}>
-                <Logo fill={'#141C22'} style={{width: '4em'}} />
+                <Logo fill={'#141C22'} style={{ width: '4em' }} />
                 <div className='logo-style'>TAKE PLACE</div>
             </Nav.Item>
-        </Navbar.Header>
-    );
+        </Navbar.Brand>
+    )
 
     const NavItems = () => (
         <>
@@ -54,27 +55,29 @@ export default function TakePlaceHeader() {
             </Nav.Item>
             {
                 user !== undefined && (
-                    <Nav.Item onClick={() => {setOpenNewObjModal(true)}}>
+                    <Nav.Item onClick={() => {
+                        setOpenNewObjModal(true)
+                    }}>
                         Создать объявление
                     </Nav.Item>
                 )
             }
         </>
-    );
+    )
 
     return (
         <Header>
             <CreateObjModal show={newObjModelOpen} onClose={() => {
                 setOpenNewObjModal(false)
             }} />
-            <FlexboxGrid justify="center" align='middle' className={'adaptive-flex'}>
+            <FlexboxGrid justify='center' align='middle' className={'adaptive-flex'}>
                 <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
                     <Navbar className={'take-place-header nav-item-style'}>
                         <NavHeader />
 
-                        <Navbar.Body>
+                        <Nav>
                             <NavItems />
-                        </Navbar.Body>
+                        </Nav>
 
                         <Nav pullRight>
                             <UserNavPanel />
@@ -84,14 +87,12 @@ export default function TakePlaceHeader() {
                     <Navbar className={'take-place-header-adaptive nav-item-style'}>
                         <NavHeader />
 
-                        <Navbar.Body>
-                            <Nav pullRight>
-                                <Dropdown title="Меню" placement="bottomEnd">
-                                    <NavItems />
-                                    <UserNavPanel />
-                                </Dropdown>
-                            </Nav>
-                        </Navbar.Body>
+                        <Nav pullRight>
+                            <Dropdown title='Меню' placement='bottomEnd'>
+                                <NavItems />
+                                <UserNavPanel />
+                            </Dropdown>
+                        </Nav>
                     </Navbar>
                 </FlexboxGrid.Item>
             </FlexboxGrid>
