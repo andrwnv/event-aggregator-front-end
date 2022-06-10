@@ -31,5 +31,6 @@ export const Me = async (): Promise<User> => {
         email: res.email,
         verified: res.verified,
         photoURL: res?.photo_url,
+        birthDay: res.birth_day === undefined ? undefined : new Date(res.birth_day * 1000)
     }
 }
