@@ -4,6 +4,8 @@
 
     box-shadow: 0 4px 15px rgba(227, 235, 241, 0.24);
     width: 100%;
+
+    user-select: none;
 }
 
 .event-card-root > * {

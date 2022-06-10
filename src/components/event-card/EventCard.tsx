@@ -21,7 +21,7 @@ type EventCardProps = {
 function datesToString(dates: Date[]): string {
     if (dates.length < 2)
         return ''
-    return `${dates[0].getDay()}/${dates[0].getMonth()}/${dates[0].getFullYear()} - ${dates[1].getDay()}/${dates[1].getMonth()}/${dates[1].getFullYear()}`
+    return `${dates[0].getDate()}.${dates[0].getMonth()}.${dates[0].getFullYear()} - ${dates[1].getDate()}.${dates[1].getMonth()}.${dates[1].getFullYear()}`
 }
 
 export default function EventCard(props: EventCardProps) {
@@ -60,7 +60,7 @@ export default function EventCard(props: EventCardProps) {
                 >
                     {props.pictureLinks.map(link => {
                         return (
-                            <img src={link} className={'event-card-img'} alt={`${props.title}.img`} key={`${link}_image`}/>
+                            <img src={link} className={'event-card-img'} alt={`${props.title}.img`} />
                         )
                     })}
                 </Carousel>
@@ -93,7 +93,7 @@ export default function EventCard(props: EventCardProps) {
             </FlexboxGrid>
 
             <FlexboxGrid justify={'space-between'} style={{ flexDirection: 'row', width: '100vw' }}>
-                <button className={`event-card-button ${user == undefined && 'event-card-long'}`}
+                <button className={`event-card-button ${user === undefined && 'event-card-long'}`}
                         onClick={openMoreInfo}>Подробнее
                 </button>
                 {

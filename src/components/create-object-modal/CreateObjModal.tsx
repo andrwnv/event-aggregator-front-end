@@ -1,6 +1,6 @@
-import React, { FormEvent, useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
-    Checkbox, CheckboxGroup,
+    Checkbox,
     DateRangePicker, FlexboxGrid,
     Form,
     Input,
@@ -14,7 +14,6 @@ import {
 import { CameraRetro } from '@rsuite/icons/es/icons/legacy'
 
 import { Countries } from '../../countries'
-import useAuth from '../../hooks/useAuth'
 
 import './CreateObjModel.css'
 import { CreateEventDTO, CreateObject, CreatePlaceDTO } from '../../api/object.api'
@@ -71,8 +70,6 @@ export default function CreateObjModal(props: CreateObjModalProps) {
     const [endDate, setEndDate] = useState<Date | undefined>(undefined)
     const [images, setImages] = useState<FileType[]>([])
     const [coords, setCoords] = useState<GeoPoint | undefined>()
-
-    const { user } = useAuth()
 
     const InfoMessage = (
         <Message showIcon type={'success'}>
@@ -152,7 +149,10 @@ export default function CreateObjModal(props: CreateObjModalProps) {
 
     const MapComponent = useCallback(() => (
         <ClickableMapComponent
-            defaultCoord={city === undefined ? { lat: 55.755793, lon: 37.617134} : {lat: parseFloat(city.coords.lat), lon: parseFloat(city.coords.lon)}}
+            defaultCoord={city === undefined ? { lat: 55.755793, lon: 37.617134 } : {
+                lat: parseFloat(city.coords.lat),
+                lon: parseFloat(city.coords.lon),
+            }}
             selectedCoords={coords === undefined ?
                 { lat: 55.755793, lon: 37.617134 } : { lat: coords.lat, lon: coords.lon }}
             handler={
@@ -215,7 +215,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                                             Укажи даты проведения:
                                             <DateRangePicker format='dd-MM-yyyy hh:mm' style={{ marginLeft: '15px' }}
                                                              ranges={[]}
-                                                             onOk={(value, event) => {
+                                                             onOk={(value, _) => {
                                                                  setBeginDate(value[0])
                                                                  setEndDate(value[1])
                                                              }}
@@ -233,7 +233,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                                     </Checkbox>
 
                                     <InputPicker data={Countries} placeholder={'Выбери локацию'} style={defaultMargin}
-                                                 onSelect={(value: string, item, event) => {
+                                                 onSelect={(value: string, item, _) => {
                                                      setCity(item as CityType)
                                                      setCoords({
                                                          lat: parseFloat(item.coords.lat),
