@@ -1,14 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 
-import { Button, Container, Content, FlexboxGrid, Loader, Message, toaster, Uploader, Modal } from 'rsuite'
+import {
+    Button,
+    Container,
+    Content,
+    FlexboxGrid,
+    Loader,
+    Message,
+    toaster,
+    Uploader,
+    Modal,
+    Pagination,
+    Input, DatePicker,
+} from 'rsuite'
 import {
     Icon,
     Check as CheckIcon,
     Exit as ExitIcon,
     Trash as TrashIcon,
     Setting as SettingIcon,
-    IdMapping as IdMappingIcon, Paragraph, RemindOutline as RemindIcon
+    IdMapping as IdMappingIcon, RemindOutline as RemindIcon,
 } from '@rsuite/icons'
 
 import TakePlaceHeader from '../../components/custom-header/TakePlaceHeader'
@@ -17,19 +29,46 @@ import { UploadUserAvatar } from '../../api/upload.api'
 import useAuth from '../../hooks/useAuth'
 
 import './ProfilePage.css'
+import { DeleteUser, UpdateUser } from '../../api/user.api'
+
+function date2str(day: Date) {
+    console.log(day)
+    return `${day.getDate()}.${day.getMonth()}.${day.getFullYear()} г.`
+}
 
 export default function ProfilePage() {
     let { user, me, logout } = useAuth()
 
     const [uploading, setUploading] = useState(false)
+    const [uploadingSettings, setUploadingSettings] = useState(false)
+    const [deleteStatus, setDeleteStatus] = useState(false)
+
     const [avatarUploading, setAvatarUploading] = useState(false)
     const [fileInfo, setFileInfo] = useState(undefined)
     const [newAvatar, setNewAvatar] = useState<File | undefined>(undefined)
     const [settingModelOpen, setSettingModelOpen] = useState(false)
     const [deleteAlert, setDeleteAlertOpen] = useState(false)
 
-    if (user === undefined)
+    const [storyActivePage, setStoryActivePage] = useState(5)
+    const [placeActivePage, setPlaceActivePage] = useState(5)
+    const [eventActivePage, setEventActivePage] = useState(5)
+
+    const [firstName, setFirstName] = useState('')
+    const [secondName, setSecondName] = useState('')
+    const [birthDay, setBirthDay] = useState<Date>(new Date())
+
+    useEffect(() => {
+        if (user !== undefined) {
+            setFirstName(user.firstName)
+            setSecondName(user.secondName)
+            if (user.birthDay !== undefined)
+                setBirthDay(user.birthDay)
+        }
+    }, [])
+
+    if (user === undefined) {
         return <Navigate to='/' />
+    }
 
     const previewFile = (file: File | undefined, callback: (data: any) => void) => {
         const reader = new FileReader()
@@ -45,12 +84,12 @@ export default function ProfilePage() {
 
     const avatarUploader = () => {
         setAvatarUploading(true)
-        if (newAvatar == undefined) {
+        if (newAvatar === undefined) {
             setAvatarUploading(false)
             return
         }
 
-        const form = new FormData
+        const form = new FormData()
         form.append('file', newAvatar)
 
         UploadUserAvatar(form).then(() => {
@@ -75,24 +114,79 @@ export default function ProfilePage() {
     }
 
     const handlesSettingsConfirm = () => {
-        setSettingModelOpen(false)
+        setUploadingSettings(true)
+
+        UpdateUser({ firstName, secondName, birthDay, password: '' }).then(status => {
+            if (!status) {
+                toaster.push(<Message type='error'>Не удалось обновлены</Message>, { placement: 'bottomCenter' })
+                setUploadingSettings(false)
+                return
+            }
+
+            setSettingModelOpen(false)
+            setTimeout(() => {
+                setUploadingSettings(false)
+                toaster.push(<Message type='info'>Данные успешно обновлены</Message>, { placement: 'bottomCenter' })
+            }, 300) // !! await close animation end
+            me()
+        })
     }
 
     const deleteAccountHandler = () => {
-        logoutHandler()
+        setDeleteStatus(true)
+        DeleteUser().then(status => {
+            if (!status) {
+                toaster.push(<Message type='error'>Не удалось удалить! Мб в следующий раз :)</Message>, { placement: 'bottomCenter' })
+                setDeleteStatus(false)
+                setDeleteAlertOpen(false)
+                return
+            }
+
+            setDeleteStatus(false)
+            logoutHandler()
+        })
     }
+
+    const ModalBodyUpload = ({ title }: any) => (
+        <FlexboxGrid align={'middle'} justify={'center'} style={{ marginTop: '20px' }}>
+            <Modal.Body className={'adaptive_modal'}>
+                <Loader size='lg' content={title} vertical />
+            </Modal.Body>
+        </FlexboxGrid>
+    )
 
     return (
         <Container className={'main-page-root'}>
             <TakePlaceHeader />
 
-            <Modal open={settingModelOpen} onClose={handlesSettingsClose}>
+            <Modal open={settingModelOpen} backdrop={false} onClose={handlesSettingsClose}>
                 <Modal.Header>
-                    <Modal.Title>Modal Title</Modal.Title>
+                    <Modal.Title>Изменить личные данные</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
-                    <Paragraph />
-                </Modal.Body>
+                {uploadingSettings ? <ModalBodyUpload title='Подожди, мы сохраняем данные' /> :
+                    (
+                        <Modal.Body>
+                            <label>Имя</label>
+                            <Input key='first_name' size='lg'
+                                   onChange={setFirstName} value={firstName} style={{ marginBottom: '10px' }}
+                            />
+                            <label>Фамилия</label>
+                            <Input key='second_name' size='lg'
+                                   onChange={setSecondName} value={secondName} style={{ marginBottom: '10px' }}
+                            />
+                            <label>Дата рождения</label>
+                            <DatePicker
+                                ranges={[]}
+                                format='dd-MM-yyyy'
+                                defaultValue={birthDay}
+                                onSelect={(value, _) => {
+                                    console.log(value)
+                                    setBirthDay(value)
+                                }}
+                            />
+                        </Modal.Body>
+                    )
+                }
                 <Modal.Footer>
                     <Button onClick={handlesSettingsConfirm} appearance='primary'>
                         Применить
@@ -106,25 +200,32 @@ export default function ProfilePage() {
             <Modal backdrop='static' role='alertdialog' open={deleteAlert} onClose={() => {
                 setDeleteAlertOpen(false)
             }} size='xs'>
-                <Modal.Body style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <RemindIcon
-                        style={{
-                            color: '#ffb300',
-                            fontSize: 24,
-                        }}
-                    />
-                    Вы действительно хотите удалить профиль?
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={deleteAccountHandler} appearance='subtle' color={'red'}>
-                        Да
-                    </Button>
-                    <Button onClick={() => {
-                        setDeleteAlertOpen(false)
-                    }} appearance='primary'>
-                        Нет, я случайно
-                    </Button>
-                </Modal.Footer>
+
+                {deleteStatus ? <ModalBodyUpload title='Прощай! Удаляем данные' /> :
+                    (
+                        <>
+                            <Modal.Body style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <RemindIcon
+                                    style={{
+                                        color: '#ffb300',
+                                        fontSize: 24,
+                                    }}
+                                />
+                                Вы действительно хотите удалить профиль?
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={deleteAccountHandler} appearance='subtle' color={'red'}>
+                                    Да
+                                </Button>
+                                <Button onClick={() => {
+                                    setDeleteAlertOpen(false)
+                                }} appearance='primary'>
+                                    Нет, я случайно
+                                </Button>
+                            </Modal.Footer>
+                        </>
+                    )
+                }
             </Modal>
 
             <Content>
@@ -140,7 +241,7 @@ export default function ProfilePage() {
                                               })
                                           }}
                                           style={{ margin: '0 7px 7px 7px' }}>
-                                    <button className={'avatar'} style={{
+                                    <button style={{
                                         height: '100px', width: '100px', border: 'none',
                                     }}>
                                         {uploading && <Loader backdrop center />}
@@ -148,8 +249,9 @@ export default function ProfilePage() {
                                             <img src={fileInfo} width='100%' height='100%' alt={'avatar-preview'}
                                                  className={'avatar-img'} />
                                         ) : (
-                                            user.photoURL === undefined
-                                                ? <Icon as={IdMappingIcon} />
+                                            user.photoURL === ''
+                                                ?
+                                                <Icon as={IdMappingIcon} style={{ fontSize: '2em', color: 'black' }} />
                                                 :
                                                 <img
                                                     src={`${templateURL_V1}/file/img/${user.photoURL}?uuid=${user.id}`}
@@ -160,13 +262,17 @@ export default function ProfilePage() {
                                 </Uploader>
                                 <div className={'short-user-info'}>
                                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                                        <span className={'main-user-info'}>{user.secondName} {user.firstName}</span>
+                                        <span className={'main-user-info'}>{user.firstName} {user.secondName}</span>
                                         {user.verified
                                             ? <Icon as={CheckIcon}
                                                     style={{ marginLeft: 7, color: 'green', fontSize: '1.5em' }} />
                                             : <></>}
                                     </div>
-                                    <span className={'second-user-info'}>{user.email}</span>
+                                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span className={'second-user-info'}>{user.email}</span>
+                                        {user.birthDay !== undefined ? <span className={'second-user-info'} style={{paddingLeft: 15}}>{date2str(user.birthDay)}</span> : <></>}
+                                    </div>
+
                                     {fileInfo
                                         ? <Button loading={avatarUploading} style={{ width: '60%' }}
                                                   onClick={avatarUploader}>
@@ -192,6 +298,51 @@ export default function ProfilePage() {
                                     <ExitIcon style={{ fontSize: '2em', paddingTop: 7 }} />
                                 </div>
                             </FlexboxGrid>
+                        </FlexboxGrid>
+
+                        <h3 className={'block-title'}>Ваши истории</h3>
+                        <FlexboxGrid justify='center' align='middle'>
+                            <Pagination className={'paginationStyle'}
+                                        prev
+                                        last
+                                        next
+                                        first
+                                        size='lg'
+                                        total={100}
+                                        limit={10} maxButtons={5}
+                                        activePage={storyActivePage}
+                                        onChangePage={setStoryActivePage}
+                            />
+                        </FlexboxGrid>
+
+                        <h3 className={'block-title'}>Ваши события</h3>
+                        <FlexboxGrid justify='center' align='middle'>
+                            <Pagination className={'paginationStyle'}
+                                        prev
+                                        last
+                                        next
+                                        first
+                                        size='lg'
+                                        total={100}
+                                        limit={10} maxButtons={5}
+                                        activePage={eventActivePage}
+                                        onChangePage={setEventActivePage}
+                            />
+                        </FlexboxGrid>
+
+                        <h3 className={'block-title'}>Ваши места</h3>
+                        <FlexboxGrid justify='center' align='middle'>
+                            <Pagination className={'paginationStyle'}
+                                        prev
+                                        last
+                                        next
+                                        first
+                                        size='lg'
+                                        total={50}
+                                        limit={5} maxButtons={5}
+                                        activePage={placeActivePage}
+                                        onChangePage={setPlaceActivePage}
+                            />
                         </FlexboxGrid>
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
