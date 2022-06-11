@@ -14,6 +14,18 @@ export const UploadObjectImg = (form: FormData, id: string, type: ObjectTypes) =
     })
 }
 
+export const UploadHistoryImg = (form: FormData, id: string) => {
+    return axios({
+        method: 'PATCH',
+        url: `${templateURL_V1}/user_story/add_photos/${id}`,
+        data: form,
+        headers: {
+            ...authHeader(),
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
 export const UploadUserAvatar = (form: FormData) => {
     return axios({
         method: 'PATCH',

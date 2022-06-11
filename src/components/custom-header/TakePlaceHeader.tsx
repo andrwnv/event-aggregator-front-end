@@ -7,12 +7,14 @@ import { ReactComponent as Logo } from '../../misc/icons/logo.svg'
 import useAuth from '../../hooks/useAuth'
 
 import './TakePlaceHeader.css'
+import CreateHistoryModal from '../create-history-modal/CreateHistoryModal'
 
 export default function TakePlaceHeader() {
     const { user } = useAuth()
     const navigate = useNavigate()
 
     const [newObjModelOpen, setOpenNewObjModal] = useState(false)
+    const [newHistModelOpen, setOpenNewHistModal] = useState(false)
 
     const UserNavPanel = () => {
         return user === undefined
@@ -54,11 +56,20 @@ export default function TakePlaceHeader() {
                 Истории
             </Nav.Item>
             {
-                user !== undefined && (
+                user !== undefined && user.verified && (
                     <Nav.Item onClick={() => {
                         setOpenNewObjModal(true)
                     }}>
                         Создать объявление
+                    </Nav.Item>
+                )
+            }
+            {
+                user !== undefined && (
+                    <Nav.Item onClick={() => {
+                        setOpenNewHistModal(true)
+                    }}>
+                        Поделиться историей
                     </Nav.Item>
                 )
             }
@@ -70,6 +81,10 @@ export default function TakePlaceHeader() {
             <CreateObjModal show={newObjModelOpen} onClose={() => {
                 setOpenNewObjModal(false)
             }} />
+            <CreateHistoryModal show={newHistModelOpen} onClose={() => {
+                setOpenNewHistModal(false)
+            }} />
+
             <FlexboxGrid justify='center' align='middle' className={'adaptive-flex'}>
                 <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
                     <Navbar className={'take-place-header nav-item-style'}>
