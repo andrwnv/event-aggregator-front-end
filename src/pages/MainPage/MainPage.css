@@ -2,8 +2,10 @@
     background-color: #141C22;
     background-image: url('../misc/resources/background-figures.png');
     background-size: cover;
+    background-repeat: repeat;
 
     height: 100vh;
+    overflow: auto;
 }
 
 .scroll-area {

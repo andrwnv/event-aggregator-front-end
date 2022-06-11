@@ -67,6 +67,33 @@
 
 /* adaptive lay */
 .user-info {}
+.profile-settings-model {}
+
+
+@media screen and (max-width: 450px) {
+    .profile-box {
+        display: flex;
+        justify-content: center !important;
+        align-items: center;
+    }
+
+    .short-user-info {
+        text-align: center;
+        justify-content: center !important;
+        align-items: center;
+    }
+
+    .user-info {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .profile-settings-model {
+        width: 100vw !important;
+    }
+}
+
 
 @media screen and (max-width: 1000px) {
     .profile-box {
@@ -78,6 +105,12 @@
         text-align: center;
         justify-content: center !important;
         align-items: center;
+    }
+
+    .user-info {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
 }
 

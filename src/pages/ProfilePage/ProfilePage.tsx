@@ -159,7 +159,7 @@ export default function ProfilePage() {
         <Container className={'main-page-root'}>
             <TakePlaceHeader />
 
-            <Modal open={settingModelOpen} backdrop={false} onClose={handlesSettingsClose}>
+            <Modal open={settingModelOpen} backdrop={false} onClose={handlesSettingsClose} className={'profile-settings-model'}>
                 <Modal.Header>
                     <Modal.Title>Изменить личные данные</Modal.Title>
                 </Modal.Header>
@@ -232,7 +232,7 @@ export default function ProfilePage() {
                 <FlexboxGrid justify='center' align='middle'>
                     <FlexboxGrid.Item colspan={20}>
                         <FlexboxGrid className={'profile-box'} align='middle' justify={'space-between'}>
-                            <FlexboxGrid align='middle'>
+                            <FlexboxGrid align='middle' className={'user-info'}>
                                 <Uploader listType='picture' fileListVisible={false} action={''}
                                           onUpload={file => {
                                               setUploading(true)
