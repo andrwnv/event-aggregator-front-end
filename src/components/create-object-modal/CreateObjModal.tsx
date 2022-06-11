@@ -69,7 +69,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
     const [beginDate, setBeginDate] = useState<Date | undefined>(undefined)
     const [endDate, setEndDate] = useState<Date | undefined>(undefined)
     const [images, setImages] = useState<FileType[]>([])
-    const [coords, setCoords] = useState<GeoPoint | undefined>()
+    let [coords, setCoords] = useState<GeoPoint | undefined>()
 
     const InfoMessage = (
         <Message showIcon type={'success'}>
@@ -158,7 +158,8 @@ export default function CreateObjModal(props: CreateObjModalProps) {
             handler={
                 (point: GeoPoint) => {
                     alert(`${point.lat} ${point.lon}`)
-                    setCoords(point)
+                    coords = point
+                    // setCoords(point)
                 }
             }
             style={{
@@ -179,103 +180,102 @@ export default function CreateObjModal(props: CreateObjModalProps) {
             }} className={'adaptive_modal'}>
                 <Modal.Header>
                     <Modal.Title>Создать новое объявление</Modal.Title>
-
-                    {uploading ? <ModalBodyUpload /> :
-                        (
-                            <Modal.Body style={{ minHeight: '70vh' }} className={'adaptive_modal'}>
-                                <FlexboxGrid align={'middle'} justify={'center'}>
-                                    <Uploader multiple action={''} listType={'picture'} onChange={setImages}
-                                              shouldUpload={file => {
-                                                  const exts = ['png', 'jpg', 'jpeg']
-                                                  if (file.name === undefined)
-                                                      return false
-                                                  return !exts.includes(ext(file.name))
-                                              }}
-                                    >
-                                        <button>
-                                            <CameraRetro />
-                                        </button>
-                                    </Uploader>
-                                </FlexboxGrid>
-                                <FlexboxGrid align={'top'} justify={'start'} style={{
-                                    flexDirection: 'column',
-                                }}>
-                                    <Form.Group controlId='radioList' style={defaultMargin}>
-                                        <RadioGroup value={radioValue} name='radioList' onChange={(value, _) => {
-                                            setRadioValue(value.toString())
-                                        }}>
-                                            <p>Выбери тип записи:</p>
-                                            <Radio value={'event'}>Событие</Radio>
-                                            <Radio value={'place'}>Место</Radio>
-                                        </RadioGroup>
-                                    </Form.Group>
-
-                                    {radioValue === 'event' && (
-                                        <div>
-                                            Укажи даты проведения:
-                                            <DateRangePicker format='dd-MM-yyyy hh:mm' style={{ marginLeft: '15px' }}
-                                                             ranges={[]}
-                                                             onOk={(value, _) => {
-                                                                 setBeginDate(value[0])
-                                                                 setEndDate(value[1])
-                                                             }}
-                                            />
-                                        </div>
-                                    )}
-
-                                    <Checkbox style={defaultMargin}
-                                              checked={payment}
-                                              onChange={(value, checked) => {
-                                                  setPayment(checked)
-                                              }}
-                                    >
-                                        Необходима оплата
-                                    </Checkbox>
-
-                                    <InputPicker data={Countries} placeholder={'Выбери локацию'} style={defaultMargin}
-                                                 onSelect={(value: string, item, _) => {
-                                                     setCity(item as CityType)
-                                                     setCoords({
-                                                         lat: parseFloat(item.coords.lat),
-                                                         lon: parseFloat(item.coords.lon),
-                                                     })
-                                                 }} value={city?.value}
-                                    />
-
-                                    <Input key='obj_title' size='lg' placeholder='Название' style={defaultMargin}
-                                           onChange={setTitle}
-                                    />
-
-                                    <Input key='obj_desc' size='lg' as='textarea' placeholder='Описание' rows={8}
-                                           style={{ ...textareaStyle, ...defaultMargin }}
-                                           onChange={setDesc}
-                                    />
-
-                                    <MapComponent />
-
-                                    <button className={'reg-button-base'}
-                                            style={{
-                                                backgroundColor: '#141C22',
-                                                color: '#D2D6D9',
-                                                marginBottom: '2em',
-                                                alignSelf: 'center',
-                                            }} type='submit' onClick={uploadingHandler}>
-                                        <div
-                                            className={'second-font-size'}
-                                            style={{
-                                                paddingLeft: '2vw',
-                                                paddingRight: '2vw',
-                                            }}
-                                        >
-                                            Загрузить
-                                        </div>
-                                    </button>
-                                </FlexboxGrid>
-                            </Modal.Body>
-                        )
-                    }
-                    <Modal.Footer></Modal.Footer>
                 </Modal.Header>
+                {uploading ? <ModalBodyUpload /> :
+                    (
+                        <Modal.Body style={{ minHeight: '70vh' }} className={'adaptive_modal'}>
+                            <FlexboxGrid align={'middle'} justify={'center'}>
+                                <Uploader multiple action={''} listType={'picture'} onChange={setImages}
+                                          shouldUpload={file => {
+                                              const extList = ['png', 'jpg', 'jpeg']
+                                              if (file.name === undefined)
+                                                  return false
+                                              return !extList.includes(ext(file.name))
+                                          }}
+                                >
+                                    <button>
+                                        <CameraRetro />
+                                    </button>
+                                </Uploader>
+                            </FlexboxGrid>
+                            <FlexboxGrid align={'top'} justify={'start'} style={{
+                                flexDirection: 'column',
+                            }}>
+                                <Form.Group controlId='radioList' style={defaultMargin}>
+                                    <RadioGroup value={radioValue} name='radioList' onChange={(value, _) => {
+                                        setRadioValue(value.toString())
+                                    }}>
+                                        <p>Выбери тип записи:</p>
+                                        <Radio value={'event'}>Событие</Radio>
+                                        <Radio value={'place'}>Место</Radio>
+                                    </RadioGroup>
+                                </Form.Group>
+
+                                {radioValue === 'event' && (
+                                    <div>
+                                        Укажи даты проведения:
+                                        <DateRangePicker format='dd-MM-yyyy hh:mm' style={{ marginLeft: '15px' }}
+                                                         ranges={[]}
+                                                         onOk={(value, _) => {
+                                                             setBeginDate(value[0])
+                                                             setEndDate(value[1])
+                                                         }}
+                                        />
+                                    </div>
+                                )}
+
+                                <Checkbox style={defaultMargin}
+                                          checked={payment}
+                                          onChange={(value, checked) => {
+                                              setPayment(checked)
+                                          }}
+                                >
+                                    Необходима оплата
+                                </Checkbox>
+
+                                <InputPicker data={Countries} placeholder={'Выбери локацию'} style={defaultMargin}
+                                             onSelect={(value: string, item, _) => {
+                                                 setCity(item as CityType)
+                                                 setCoords({
+                                                     lat: parseFloat(item.coords.lat),
+                                                     lon: parseFloat(item.coords.lon),
+                                                 })
+                                             }} value={city?.value}
+                                />
+
+                                <Input key='obj_title' size='lg' placeholder='Название' style={defaultMargin}
+                                       onChange={setTitle}
+                                />
+
+                                <Input key='obj_desc' size='lg' as='textarea' placeholder='Описание' rows={8}
+                                       style={{ ...textareaStyle, ...defaultMargin }}
+                                       onChange={setDesc}
+                                />
+
+                                <MapComponent />
+
+                                <button className={'reg-button-base'}
+                                        style={{
+                                            backgroundColor: '#141C22',
+                                            color: '#D2D6D9',
+                                            marginBottom: '2em',
+                                            alignSelf: 'center',
+                                        }} type='submit' onClick={uploadingHandler}>
+                                    <div
+                                        className={'second-font-size'}
+                                        style={{
+                                            paddingLeft: '2vw',
+                                            paddingRight: '2vw',
+                                        }}
+                                    >
+                                        Загрузить
+                                    </div>
+                                </button>
+                            </FlexboxGrid>
+                        </Modal.Body>
+                    )
+                }
+                <Modal.Footer></Modal.Footer>
             </Modal>
         </FlexboxGrid>
     )
