@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import RegistrationConfirmPage from './pages/RegistrationPage/RegistrationConfirmPage/RegistrationConfirmPage'
 import AuthenticatedRoute from './components/custom-roures/AuthenticatedRoute'
@@ -15,6 +15,8 @@ import { AuthProvider } from './hooks/useAuth'
 
 import 'rsuite/styles/index.less'
 import './App.css'
+import ObjectPage from './pages/ObjectPage/ObjectPage'
+import { ObjectType } from './api/const'
 
 function App() {
     return (
@@ -30,6 +32,8 @@ function App() {
                                    </AuthenticatedRoute>
                                }
                         />
+                        <Route path='/event/:id' element={<ObjectPage type={ObjectType.EVENT} />}/>
+                        <Route path='/place/:id' element={<ObjectPage type={ObjectType.PLACE} />}/>
                         <Route path='explore' element={<ExplorePage />} />
                         <Route path='sign_in' element={<SignInPage />} />
                         <Route path='sign_up'>

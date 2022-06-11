@@ -8,7 +8,7 @@ import { useDraggable } from 'react-use-draggable-scroll'
 
 import { IsLiked } from '../../api/like.api'
 import { GetObjects, ObjectData } from '../../api/object.api'
-import { ObjectTypes, templateURL_V1 } from '../../api/const'
+import { ObjectType, templateURL_V1 } from '../../api/const'
 
 import './MainPage.css'
 
@@ -22,8 +22,8 @@ export default function MainPage() {
     })
 
     useEffect(() => {
-        GetObjects(1, 5, ObjectTypes.PLACE).then(places => {
-            GetObjects(1, 5, ObjectTypes.EVENT).then(async events => {
+        GetObjects(1, 5, ObjectType.PLACE).then(places => {
+            GetObjects(1, 5, ObjectType.EVENT).then(async events => {
                 let objs = [...places, ...events]
                 if (user !== undefined) {
                     for (let object of objs) {
@@ -33,7 +33,7 @@ export default function MainPage() {
                 setObjects(objs)
             })
         })
-    }, [])
+    }, [user])
 
     return (
         <Container className={'main-page-root'}>

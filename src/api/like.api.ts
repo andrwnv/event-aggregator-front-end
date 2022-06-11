@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { ObjectTypes, templateURL_V1 } from './const'
+import { ObjectType, templateURL_V1 } from './const'
 import { authHeader } from './auth/auth.header'
 
 type LikeDto = {
@@ -8,9 +8,9 @@ type LikeDto = {
     place_id?: string;
 };
 
-export const LikeObject = async (id: string, type: ObjectTypes): Promise<boolean> => {
+export const LikeObject = async (id: string, type: ObjectType): Promise<boolean> => {
     let dto = {} as LikeDto
-    if (type === ObjectTypes.EVENT) {
+    if (type === ObjectType.EVENT) {
         dto.event_id = id
     } else {
         dto.place_id = id

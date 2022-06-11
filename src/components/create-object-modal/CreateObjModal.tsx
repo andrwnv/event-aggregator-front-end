@@ -18,7 +18,7 @@ import { Countries } from '../../countries'
 import './CreateObjModel.css'
 import { CreateEventDTO, CreateObject, CreatePlaceDTO } from '../../api/object.api'
 import { FileType } from 'rsuite/cjs/Uploader/Uploader'
-import { ObjectTypes } from '../../api/const'
+import { ObjectType } from '../../api/const'
 import { UploadObjectImg } from '../../api/upload.api'
 import { GeoPoint } from '../../misc/GeoPoint'
 import ClickableMapComponent from '../clickable-map/ClickableMap'
@@ -108,14 +108,14 @@ export default function CreateObjModal(props: CreateObjModalProps) {
 
         setUploading(true)
 
-        CreateObject(info, radioValue as ObjectTypes).then(res => {
+        CreateObject(info, radioValue as ObjectType).then(res => {
             const form = new FormData
             images.forEach(img => {
                 if (img.blobFile !== undefined)
                     form.append('files', img.blobFile)
             })
 
-            UploadObjectImg(form, res.data.result.id, radioValue as ObjectTypes).then(() => {
+            UploadObjectImg(form, res.data.result.id, radioValue as ObjectType).then(() => {
                 props.onClose()
                 setTimeout(() => {
                     setUploading(false)

@@ -5,8 +5,9 @@ import Carousel from 'rsuite/Carousel'
 import './EventCard.css'
 import { FlexboxGrid } from 'rsuite'
 import { DislikeObject, LikeObject } from '../../api/like.api'
-import { ObjectTypes } from '../../api/const'
+import { ObjectType } from '../../api/const'
 import useAuth from '../../hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 type EventCardProps = {
     id: string;
@@ -29,7 +30,14 @@ export default function EventCard(props: EventCardProps) {
 
     const { user } = useAuth()
 
+    const navigate = useNavigate()
+
     const openMoreInfo = () => {
+        let type = ObjectType.PLACE
+        if (props.dates.length === 2)
+            type = ObjectType.EVENT
+
+        navigate(`/${type}/${props.id}`)
     }
 
     const likeHandler = () => {
@@ -42,7 +50,7 @@ export default function EventCard(props: EventCardProps) {
                     setLike(false)
             })
         else
-            LikeObject(props.id, props.dates.length === 0 ? ObjectTypes.PLACE : ObjectTypes.EVENT).then(res => {
+            LikeObject(props.id, props.dates.length === 0 ? ObjectType.PLACE : ObjectType.EVENT).then(res => {
                 if (res)
                     setLike(true)
             })

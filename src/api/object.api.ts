@@ -1,5 +1,5 @@
 import axios, { AxiosPromise } from 'axios'
-import { ObjectTypes, templateURL_V1 } from './const'
+import { ObjectType, templateURL_V1 } from './const'
 import { authHeader } from './auth/auth.header'
 import { User } from '../types/user.type'
 
@@ -45,7 +45,7 @@ export type ObjectData = {
     liked?: boolean
 }
 
-export const CreateObject = (info: CreateEventDTO | CreatePlaceDTO, type: ObjectTypes): AxiosPromise => {
+export const CreateObject = (info: CreateEventDTO | CreatePlaceDTO, type: ObjectType): AxiosPromise => {
     return axios({
         method: 'POST',
         url: `${templateURL_V1}/${type}/create`,
@@ -54,7 +54,7 @@ export const CreateObject = (info: CreateEventDTO | CreatePlaceDTO, type: Object
     })
 }
 
-export const GetObjects = async (page: number, count: number, type: ObjectTypes): Promise<ObjectData[]> => {
+export const GetObjects = async (page: number, count: number, type: ObjectType): Promise<ObjectData[]> => {
     try {
         const data = await axios({
             method: 'GET',
@@ -68,3 +68,20 @@ export const GetObjects = async (page: number, count: number, type: ObjectTypes)
         return []
     }
 }
+
+export const GetObject = async (id: string, type: ObjectType): Promise<ObjectData | null> => {
+    try {
+        const data = await axios({
+            method: 'GET',
+            url: `${templateURL_V1}/${type}/${id}`
+        })
+
+        return {
+            ...data.data.result
+        } as ObjectData
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
