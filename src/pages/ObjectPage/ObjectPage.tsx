@@ -263,7 +263,7 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                                         justifyContent: 'space-between',
                                         margin: 15,
                                     }}>
-                                        <span>{description}</span>
+                                        <span style={{paddingBottom: 10}}>{description}</span>
 
                                         <button
                                             className={'event-card-button'}
