@@ -43,6 +43,12 @@
     max-width: 30vw;
 }
 
+@media screen and (max-width: 1600px) {
+    .scroll-item-sizes {
+        max-width: 50vw;
+    }
+}
+
 @media screen and (max-width: 1024px) {
     .scroll-area {
         flex-direction: column;
