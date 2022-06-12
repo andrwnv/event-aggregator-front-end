@@ -9,7 +9,7 @@
     display: none;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1024px) {
     .take-place-header {
         display: none;
     }
@@ -59,7 +59,7 @@
 
 .adaptive-flex-inner { }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1024px) {
     .adaptive-flex {
         width: 100vw;
         justify-content: flex-start;

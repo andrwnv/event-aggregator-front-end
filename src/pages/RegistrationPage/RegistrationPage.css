@@ -22,7 +22,7 @@
     max-width: 30vw;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1024px) {
     .reg-form {
         max-width: 70vw;
     }
