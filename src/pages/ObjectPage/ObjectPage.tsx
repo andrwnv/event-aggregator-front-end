@@ -1,21 +1,29 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import { Container, Content, FlexboxGrid } from 'rsuite'
-import TimeIcon from '@rsuite/icons/Time'
-
-import { User } from '../../types/user.type'
-import { ObjectType, templateURL_V1 } from '../../api/const'
-import { GetObject, ObjectRegion } from '../../api/object.api'
-
-import NotFoundPage from '../NotFoundPage/NotFoundPage'
-import TakePlaceHeader from '../../components/custom-header/TakePlaceHeader'
-import Carousel from 'rsuite/Carousel'
-import ClickableMapComponent from '../../components/clickable-map/ClickableMap'
 import { MapContainer, Marker, TileLayer } from 'react-leaflet'
 
+import { Container, Content, FlexboxGrid, Input, InputGroup, Loader, Message, Pagination, toaster } from 'rsuite'
+import TimeIcon from '@rsuite/icons/Time'
+import SendIcon from '@rsuite/icons/Send'
+import CloseIcon from '@rsuite/icons/Close'
+
+import { GetObject, ObjectRegion } from '../../api/object.api'
+import { ObjectType, templateURL_V1 } from '../../api/const'
+import { User } from '../../types/user.type'
+
+import TakePlaceHeader from '../../components/custom-header/TakePlaceHeader'
+import Carousel from 'rsuite/Carousel'
+
+import { CommentDto, CreateComment, DeleteComment, GetComments } from '../../api/comment.api'
+import { DislikeObject, IsLiked, LikeObject } from '../../api/like.api'
+import useAuth from '../../hooks/useAuth'
+
+import './ObjectPage.css'
+
+
 type ObjectPageProps = {
-    type: ObjectType
+    type: ObjectType,
 }
 
 function dates2string(dates: Date[]): string {
@@ -27,8 +35,8 @@ function dates2string(dates: Date[]): string {
 
 const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
     const { id } = useParams()
-
-    const [successStatus, setSuccessStatus] = useState<boolean>(false)
+    const { user } = useAuth()
+    const navigate = useNavigate()
 
     const [title, setTitle] = useState<string>('')
     const [description, setDescription] = useState<string>('')
@@ -41,6 +49,11 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
     const [createdBy, setCreator] = useState<User | undefined>(undefined)
     const [images, setImages] = useState<string[]>([])
     const [isLiked, setIsLiked] = useState<boolean | undefined>(undefined)
+
+    const [placeActivePage, setPlaceActivePage] = useState<number>(1)
+    const [commentList, updateCommentList] = useState<CommentDto[]>([])
+    const [commentUpload, setCommentUpload] = useState<boolean>(false)
+    const [commentText, setCommentText] = useState<string>('')
 
     const MapComponent = useCallback(() => (
         <MapContainer
@@ -65,15 +78,28 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
         </MapContainer>
     ), [latitude, longitude])
 
+    const AlertMessage = (
+        <Message showIcon type={'info'}>
+            Не получилось загрузить комментарии
+        </Message>
+    )
+
+    const ErrorMessage = (
+        <Message showIcon type={'error'}>
+            Не получилось создать комментарий
+        </Message>
+    )
+
     useEffect(() => {
         if (id === undefined)
             return
 
         GetObject(id, type).then(info => {
-            if (!info)
+            if (!info) {
+                navigate('/not_found')
                 return
+            }
 
-            setSuccessStatus(true)
             setTitle(info.title)
             setDescription(info.description)
             setPaymentRequired(info.payment_need)
@@ -88,12 +114,87 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                 setBeginDate(new Date(info.begin_date * 1000))
                 setEndDate(new Date(info.end_date * 1000))
             }
+
+            if (user) {
+                IsLiked(id!).then(liked => {
+                    setIsLiked(liked)
+                }).catch(() => {
+                    setIsLiked(false)
+                })
+            }
         })
-    }, [])
 
+        GetComments({ objectId: id, type: type, page: 0, count: 10 }).then(list => {
+            updateCommentList(list)
+        }).catch(() => {
+            toaster.push(AlertMessage, { placement: 'bottomCenter' })
+        })
+    }, [id, type, navigate])
 
-    if (!successStatus)
-        return <NotFoundPage />
+    const deleteCommentHandler = (commentId: string) => {
+        DeleteComment({ type: type, commentId: commentId })
+            .then(res => {
+                if (res) {
+                    updateCommentList(commentList.filter(comment => {
+                        return comment.id !== commentId
+                    }))
+                }
+            }).catch()
+    }
+
+    const onCommentPush = () => {
+        setCommentUpload(true)
+        CreateComment({
+            text: commentText,
+            objectId: id!,
+            type: type!,
+        }).then(value => {
+            setCommentUpload(false)
+            setCommentText('')
+            updateCommentList([{
+                id: value.data.result.id,
+                linkedTo: id!,
+                text: value.data.result.comment_body,
+                createdAt: new Date(value.data.result.created_at * 1000),
+                createdBy: user!,
+            }, ...commentList])
+        }).catch(() => {
+            setCommentUpload(false)
+            toaster.push(ErrorMessage, { placement: 'bottomCenter' })
+        })
+    }
+
+    const CommentView = (comment: CommentDto) => {
+        return (
+            <div className={'comment-container'} style={{ marginTop: 10 }} key={comment.id}>
+                <img
+                    className={'comment-some-user-avatar'}
+                    src={`${templateURL_V1}/file/img/${comment.createdBy.photoURL}?uuid=${comment.createdBy.id}`}
+                    alt={`${comment.createdBy.email}`}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span
+                            style={{ fontWeight: 600 }}>{comment.createdBy.firstName} {comment.createdBy.secondName}</span>
+                        <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center' }}>
+                            {`${comment.createdAt.getHours()}-${comment.createdAt.getMinutes()} ${comment.createdAt.getDate()}.${comment.createdAt.getMonth()}.${comment.createdAt.getFullYear()} г.`}
+
+                            {
+                                comment.createdBy.id === user?.id
+                                    ? <CloseIcon
+                                        style={{ cursor: 'pointer', marginLeft: 10, color: 'darkred' }}
+                                        onClick={() => deleteCommentHandler(comment.id)}
+                                    />
+                                    : <></>
+                            }
+                        </div>
+                    </div>
+                    <span>{comment.text}</span>
+                </div>
+            </div>
+        )
+    }
+
 
     return (
         <Container className={'main-page-root'}>
@@ -102,22 +203,10 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
             <Content style={{ marginTop: 15 }}>
                 <FlexboxGrid justify='center' align='middle' className={'adaptive-flex'}>
                     <FlexboxGrid.Item className={'adaptive-flex-inner'} colspan={20}>
-                        <div style={{
-                            backgroundColor: '#b8c8d5',
-                            borderRadius: 7,
-                            padding: 15,
-                            display: 'flex',
-                            flexDirection: 'column',
-                        }}>
-                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                        <div className={'object-container'}>
+                            <div className={'object-container-info'}>
                                 <Carousel
-                                    style={{
-                                        borderRadius: '2%',
-                                        display: 'flex',
-                                        padding: 0,
-                                        width: '65%',
-                                        marginBottom: 15,
-                                    }}
+                                    className={'object-container-carousel'}
                                     shape={'bar'}
                                     placement={'bottom'}
                                     autoplay={true}
@@ -126,18 +215,13 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                                     {images.map(fileName => {
                                         return (
                                             <img src={`${templateURL_V1}/file/img/${fileName}?uuid=${createdBy?.id}`}
-                                                 className={'event-card-img'} alt={`${fileName}.img`} />
+                                                 className={'object-container-carousel-img'} alt={`${fileName}.img`} />
                                         )
                                     })}
                                 </Carousel>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
-
-                                    <div style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        justifyContent: 'space-between',
-                                    }}>
+                                    <div className={'object-container-region-info'}>
                                         <h3 style={{ marginLeft: 15 }}>{title}</h3>
                                         {
                                             regionInfo && (
@@ -184,6 +268,11 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                                         <button
                                             className={'event-card-button'}
                                             onClick={() => {
+                                                if (isLiked) {
+                                                    DislikeObject(id!).then(() => setIsLiked(false))
+                                                } else {
+                                                    LikeObject(id!, type).then(() => setIsLiked(true))
+                                                }
                                             }}>
                                             <svg
                                                 width='20' height='20'
@@ -201,6 +290,71 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                             </div>
 
                             <MapComponent />
+                        </div>
+                        {
+                            user && (
+                                <div className={'comment-container'}>
+                                    <img
+                                        className={'comment-my-avatar'}
+                                        src={`${templateURL_V1}/file/img/${user.photoURL}?uuid=${user.id}`}
+                                        alt={`your_avatar`}
+                                    />
+
+                                    <InputGroup inside style={{ width: '100%' }}>
+                                        <Input as={'textarea'}
+                                               rows={3}
+                                               placeholder={'Текст вашего комментария...'}
+                                               style={{
+                                                   resize: 'none',
+                                                   overflow: 'auto',
+                                                   zIndex: 0,
+                                               }}
+                                               onChange={setCommentText}
+                                        />
+                                        <InputGroup.Button
+                                            className={'comment-send-button'}
+                                            onClick={onCommentPush}
+                                        >
+                                            {
+                                                commentUpload ? <Loader /> : <SendIcon />
+                                            }
+                                        </InputGroup.Button>
+                                    </InputGroup>
+                                </div>
+                            )
+                        }
+
+                        <div>
+                            {
+                                commentList.map(comment => (
+                                    <CommentView
+                                        id={comment.id}
+                                        linkedTo={comment.linkedTo}
+                                        text={comment.text}
+                                        createdAt={comment.createdAt}
+                                        createdBy={comment.createdBy}
+                                    />
+                                ))
+                            }
+
+                            {
+                                commentList.length > 0 && (
+                                    <FlexboxGrid justify='center' align='middle'
+                                                 style={{ marginTop: 15, marginBottom: 15 }}>
+                                        <Pagination className={'paginationStyle'}
+                                                    prev
+                                                    last
+                                                    next
+                                                    first
+                                                    size='lg'
+                                                    total={50}
+                                                    limit={5} maxButtons={5}
+                                                    activePage={placeActivePage}
+                                                    onChangePage={setPlaceActivePage}
+                                        />
+                                    </FlexboxGrid>
+                                )
+                            }
                         </div>
                     </FlexboxGrid.Item>
                 </FlexboxGrid>
