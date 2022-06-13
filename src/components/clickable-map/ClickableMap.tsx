@@ -2,6 +2,7 @@ import React, { CSSProperties, useState } from 'react'
 import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
 
 import { GeoPoint } from '../../misc/GeoPoint'
+import { SearchResult } from '../../api/search.api'
 
 type ClickableMapInfo = {
     defaultCoord: GeoPoint;
@@ -9,14 +10,13 @@ type ClickableMapInfo = {
 
     selectedCoords?: GeoPoint;
 
-    eventsPositions?: GeoPoint[];
-    placesPositions?: GeoPoint[];
+    objects?: SearchResult[];
 
     style?: CSSProperties;
 };
 
 function ClickableMapComponent(props: ClickableMapInfo) {
-    const [initialPosition, setInitialPosition] = useState<GeoPoint>(props.defaultCoord)
+    const [initialPosition, ] = useState<GeoPoint>(props.defaultCoord)
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>(
         props.selectedCoords === undefined ? [props.defaultCoord.lat, props.defaultCoord.lon]
             : [props.selectedCoords.lat, props.selectedCoords.lon],
@@ -27,6 +27,7 @@ function ClickableMapComponent(props: ClickableMapInfo) {
             click(e) {
                 const coords = e.latlng
                 props.handler({ lat: coords.lat, lon: coords.lng })
+                console.log(coords)
                 setSelectedPosition([
                     coords.lat,
                     coords.lng,
@@ -51,23 +52,13 @@ function ClickableMapComponent(props: ClickableMapInfo) {
             <Markers />
 
             {
-                props.eventsPositions?.map(item => (
-                    <Marker
-                        key={`${item.lat}_${item.lon}`}
-                        position={[item.lat, item.lon]}
+                props.objects?.map(item => {
+                    return (<Marker
+                        key={`${item.location.lon}_${item.location.lat}`}
+                        position={[item.location.lat, item.location.lon]}
                         interactive={false}
-                    />
-                ))
-            }
-
-            {
-                props.placesPositions?.map(item => (
-                    <Marker
-                        key={1}
-                        position={[item.lat, item.lon]}
-                        interactive={false}
-                    />
-                ))
+                    />)
+                })
             }
 
             <TileLayer

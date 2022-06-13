@@ -80,7 +80,6 @@ export const GetObject = async (id: string, type: ObjectType): Promise<ObjectDat
             ...data.data.result
         } as ObjectData
     } catch (err) {
-        console.log(err)
         return null
     }
 }

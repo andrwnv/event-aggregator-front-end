@@ -10,7 +10,7 @@ import {
 } from 'rsuite'
 import { FileType } from 'rsuite/cjs/Uploader/Uploader'
 import { CameraRetro } from '@rsuite/icons/es/icons/legacy'
-import { CreateHistory, CreateHistoryDto, LinkedEvent, LinkedPlace } from '../../api/history.api'
+import { CreateHistory } from '../../api/history.api'
 import { UploadHistoryImg } from '../../api/upload.api'
 
 type CreateHistoryModalProps = {
@@ -86,7 +86,7 @@ export default function CreateHistoryModal(props: CreateHistoryModalProps) {
                 return
             }
 
-            const form = new FormData
+            const form = new FormData()
             images.forEach(img => {
                 if (img.blobFile !== undefined)
                     form.append('files', img.blobFile)

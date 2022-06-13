@@ -90,6 +90,11 @@ export default function CreateObjModal(props: CreateObjModalProps) {
     )
 
     const uploadingHandler = () => {
+        console.log(coords)
+        console.log({
+            longitude: coords!.lon,
+            latitude: coords!.lat,
+        })
         let info: CreateEventDTO | CreatePlaceDTO = {
             title: title,
             description: desc,
@@ -109,7 +114,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
         setUploading(true)
 
         CreateObject(info, radioValue as ObjectType).then(res => {
-            const form = new FormData
+            const form = new FormData()
             images.forEach(img => {
                 if (img.blobFile !== undefined)
                     form.append('files', img.blobFile)
@@ -122,7 +127,6 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                     toaster.push(InfoMessage, { placement: 'bottomCenter' })
                 }, 300) // !! await close animation end
             }).catch(err => {
-                console.log(err)
                 props.onClose()
                 setTimeout(() => {
                     setUploading(false)
@@ -130,7 +134,6 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                 }, 300) // !! await close animation end
             })
         }).catch(err => {
-            console.log(err)
             props.onClose()
             setTimeout(() => {
                 setUploading(false)

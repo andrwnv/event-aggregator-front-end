@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Container, Sidebar, Sidenav, Nav, Navbar, FlexboxGrid } from 'rsuite'
 
 import ArrowRightLineIcon from '@rsuite/icons/ArrowRightLine'
@@ -18,6 +18,8 @@ import SearchIcon from '@rsuite/icons/Search'
 import './ExplorePage.css'
 import { useNavigate } from 'react-router-dom'
 import SearchBar from '../../components/search-bar/SearchBar'
+import { SearchNearby, SearchResult } from '../../api/search.api'
+
 
 const NavToggle = ({ expand, onChange }: any) => {
     return (
@@ -33,16 +35,27 @@ const NavToggle = ({ expand, onChange }: any) => {
 
 export default function ExplorePage() {
     const [expand, setExpand] = useState(false)
-    const [active, setActive] = React.useState('2')
+    const [active, setActive] = useState('2')
     const [initialPosition, setInitialPosition] = useState<GeoPoint>({ lat: 55.755793, lon: 37.617134 })
-    const navigate = useNavigate()
+    const [objects, setObjects] = useState<SearchResult[]>([])
 
-    // const {user, logout} = useAuth();
+    const navigate = useNavigate()
 
     const updateGeoLocation = () => {
         navigator.geolocation.getCurrentPosition(position => {
             const { latitude, longitude } = position.coords
             setInitialPosition({ lat: latitude, lon: longitude })
+            SearchNearby({
+                coords: {
+                    lat: latitude,
+                    lon: longitude
+                },
+                types: [],
+                from: 0,
+                limit: 50
+            }).then(res => {
+                setObjects(res)
+            })
         })
     }
 
@@ -58,12 +71,9 @@ export default function ExplorePage() {
                     alert(`${point.lat} ${point.lon}`)
                 }
             }
-            eventsPositions={[{ lat: 55.755793, lon: 37.617134 }, {
-                lat: 55.7665309,
-                lon: 37.767219543,
-            }, { lat: 55.6781651, lon: 37.84721374 }]}
+            objects={objects}
         />
-    ), [initialPosition])
+    ), [initialPosition, objects])
 
     return (
         <Container>

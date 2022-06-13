@@ -16,6 +16,7 @@ type Item = {
 
 type SearchBarProps = {
     foundItemsHandler: (items: Item[]) => void,
+    // types: string[],
 }
 
 
