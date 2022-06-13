@@ -39,7 +39,6 @@ export function AuthProvider({ children }: { children: ReactNode }): JSX.Element
     function me() {
         Me().then(updated => {
             setUser(updated)
-            console.log(updated)
         }).catch(err => {
             setError(err.response)
         }).finally(() => setLoadingInitial(false))

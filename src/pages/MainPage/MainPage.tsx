@@ -23,7 +23,7 @@ export default function MainPage() {
     })
 
     useEffect(() => {
-        GetObjects(1, 5, ObjectType.PLACE).then(places => {
+        GetObjects(1, 10, ObjectType.PLACE).then(places => {
             GetObjects(1, 5, ObjectType.EVENT).then(async events => {
                 let objs = [...places, ...events]
                 if (user !== undefined) {

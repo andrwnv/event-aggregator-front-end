@@ -32,7 +32,6 @@ import './ProfilePage.css'
 import { DeleteUser, UpdateUser } from '../../api/user.api'
 
 function date2str(day: Date) {
-    console.log(day)
     return `${day.getDate()}.${day.getMonth()}.${day.getFullYear()} г.`
 }
 
@@ -64,7 +63,7 @@ export default function ProfilePage() {
             if (user.birthDay !== undefined)
                 setBirthDay(user.birthDay)
         }
-    }, [])
+    }, [user])
 
     if (user === undefined) {
         return <Navigate to='/' />
@@ -180,7 +179,6 @@ export default function ProfilePage() {
                                 format='dd-MM-yyyy'
                                 defaultValue={birthDay}
                                 onSelect={(value, _) => {
-                                    console.log(value)
                                     setBirthDay(value)
                                 }}
                             />
