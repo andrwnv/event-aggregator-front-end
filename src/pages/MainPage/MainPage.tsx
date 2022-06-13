@@ -12,6 +12,7 @@ import { ObjectType, templateURL_V1 } from '../../api/const'
 
 import './MainPage.css'
 
+
 export default function MainPage() {
     const ref = useRef<HTMLDivElement>() as React.MutableRefObject<HTMLInputElement>
     const [objects, setObjects] = useState<ObjectData[]>([])
@@ -64,7 +65,7 @@ export default function MainPage() {
                                     }
 
                                     return (
-                                        <div className={'scroll-item scroll-item-sizes'} id={`${item.id}_root`} key={`${item.id}_root`}>
+                                        <div className={'scroll-item scroll-item-sizes'} key={`${item.id}_root`}>
                                             <EventCard id={item.id} title={item.title}
                                                        shortText={item.description}
                                                        location={item.region_info.region_name}

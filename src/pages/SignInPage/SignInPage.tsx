@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-import { Container, Content, FlexboxGrid } from 'rsuite';
+import { Container, FlexboxGrid } from 'rsuite';
 import { useNavigate } from 'react-router-dom';
 
 import useAuth from '../../hooks/useAuth';
@@ -60,10 +60,7 @@ export default function SignInPage() {
                                 onChange={(newValue) => {
                                     setEmail(newValue);
                                 }}
-                                ruleHandler={(value) => {
-                                    const re = /\S+@\S+\.\S+/;
-                                    return !re.test(value) && value.length > 0;
-                                }}
+                                ruleHandler={emailRule}
                             />
 
                             <CustomInput
