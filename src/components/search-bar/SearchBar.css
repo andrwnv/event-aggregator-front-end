@@ -1,0 +1,15 @@
+.search-bar {
+    padding: 14px;
+}
+
+.search-bar > .rs-input-group > input {
+    background-color: #e3ebf1 !important;
+}
+
+.search-bar > .rs-input-group > input::placeholder {
+    color: #273540;
+}
+
+.search-bar > .rs-input-group > button > * {
+    color: #273540;
+}
