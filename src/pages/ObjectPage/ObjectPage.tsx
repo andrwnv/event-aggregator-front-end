@@ -32,7 +32,6 @@ function dates2string(dates: Date[]): string {
     return `${dates[0].getDate()}.${dates[0].getMonth()}.${dates[0].getFullYear()} - ${dates[1].getDate()}.${dates[1].getMonth()}.${dates[1].getFullYear()}`
 }
 
-
 const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
     const { id } = useParams()
     const { user } = useAuth()
@@ -54,6 +53,7 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
     const [commentList, updateCommentList] = useState<CommentDto[]>([])
     const [commentUpload, setCommentUpload] = useState<boolean>(false)
     const [commentText, setCommentText] = useState<string>('')
+    const [totalCommentCount, setTotalCommentCount] = useState(-1)
 
     const MapComponent = useCallback(() => (
         <MapContainer
@@ -123,13 +123,20 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                 })
             }
         })
+    }, [id, type, navigate])
 
-        GetComments({ objectId: id, type: type, page: 0, count: 10 }).then(list => {
-            updateCommentList(list)
+    useEffect(() => {
+        if (id === undefined)
+            return
+
+        GetComments({ objectId: id, type: type, page: placeActivePage, count: 8 }).then(commentsDto => {
+            setPlaceActivePage(placeActivePage)
+            updateCommentList(commentsDto.list)
+            setTotalCommentCount(commentsDto.totalSize)
         }).catch(() => {
             toaster.push(AlertMessage, { placement: 'bottomCenter' })
         })
-    }, [id, type, navigate])
+    }, [placeActivePage])
 
     const deleteCommentHandler = (commentId: string) => {
         DeleteComment({ type: type, commentId: commentId })
@@ -194,7 +201,6 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
             </div>
         )
     }
-
 
     return (
         <Container className={'main-page-root'}>
@@ -326,7 +332,7 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
 
                         <div>
                             {
-                                commentList.map(comment => (
+                                commentList?.map(comment => (
                                     <CommentView
                                         id={comment.id}
                                         linkedTo={comment.linkedTo}
@@ -338,7 +344,7 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                             }
 
                             {
-                                commentList.length > 0 && (
+                                Math.floor(totalCommentCount / 8) > 1 && (
                                     <FlexboxGrid justify='center' align='middle'
                                                  style={{ marginTop: 15, marginBottom: 15 }}>
                                         <Pagination className={'paginationStyle'}
@@ -347,8 +353,8 @@ const ObjectPage: React.FC<ObjectPageProps> = ({ type }) => {
                                                     next
                                                     first
                                                     size='lg'
-                                                    total={50}
-                                                    limit={5} maxButtons={5}
+                                                    total={totalCommentCount}
+                                                    limit={8} maxButtons={totalCommentCount}
                                                     activePage={placeActivePage}
                                                     onChangePage={setPlaceActivePage}
                                         />

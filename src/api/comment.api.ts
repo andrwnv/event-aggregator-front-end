@@ -25,6 +25,13 @@ export type CommentDto = {
     createdBy: User,
 }
 
+export type CommentListDto = {
+    totalSize: number
+    page: number
+    size: number
+    list: CommentDto[]
+}
+
 export type DeleteCommentDto = {
     type: ObjectType,
     commentId: string
@@ -42,16 +49,17 @@ export const CreateComment = (dto: CreateCommentDto): AxiosPromise => {
     })
 }
 
-export const GetComments = async (dto: GetPaginatedCommentsDto): Promise<CommentDto[]> => {
+export const GetComments = async (dto: GetPaginatedCommentsDto): Promise<CommentListDto> => {
     try {
         let result: CommentDto[] = []
 
-        const data = await axios({
+        const response = await axios({
             method: 'GET',
             url: `${templateURL_V1}/comments/${dto.type}/${dto.objectId}/${dto.page}/${dto.count}`,
         })
 
-        for (const commentData of data.data.result) {
+        const data = response.data.result
+        for (const commentData of data.list) {
             result.push({
                 id: commentData.id,
                 linkedTo: commentData.linked_object_id,
@@ -71,9 +79,19 @@ export const GetComments = async (dto: GetPaginatedCommentsDto): Promise<Comment
             })
         }
 
-        return result
+        return {
+            totalSize: data.total_size,
+            page: data.page,
+            size: data.size,
+            list: result
+        }
     } catch (err) {
-        return []
+        return {
+            totalSize: -1,
+            page: -1,
+            size: -1,
+            list: []
+        }
     }
 }
 
