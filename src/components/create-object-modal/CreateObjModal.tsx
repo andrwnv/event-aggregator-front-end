@@ -152,7 +152,7 @@ export default function CreateObjModal(props: CreateObjModalProps) {
 
     const MapComponent = useCallback(() => (
         <ClickableMapComponent
-            defaultCoord={city === undefined ? { lat: 55.755793, lon: 37.617134 } : {
+            defaultCoords={city === undefined ? { lat: 55.755793, lon: 37.617134 } : {
                 lat: parseFloat(city.coords.lat),
                 lon: parseFloat(city.coords.lon),
             }}
@@ -160,7 +160,6 @@ export default function CreateObjModal(props: CreateObjModalProps) {
                 { lat: 55.755793, lon: 37.617134 } : { lat: coords.lat, lon: coords.lon }}
             handler={
                 (point: GeoPoint) => {
-                    alert(`${point.lat} ${point.lon}`)
                     coords = point
                     // setCoords(point)
                 }

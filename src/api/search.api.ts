@@ -34,13 +34,15 @@ const genTypeList = (types: ObjectType[]): string => {
     return res
 }
 
-export const SearchByValue = async (dto: SearchByValueDto) => {
+export const SearchByValue = async (dto: SearchByValueDto): Promise<SearchResult[]> => {
     const params = new URLSearchParams({
-        value: dto.value,
+        val: dto.value,
         f: dto.from.toString(10),
         s: dto.limit.toString(10),
         type: genTypeList(dto.types),
     }).toString()
+
+    console.log('search by value called')
 
     try {
         const res = await axios({
@@ -48,21 +50,16 @@ export const SearchByValue = async (dto: SearchByValueDto) => {
             url: `${templateURL_V1}/search/value?` + params
         })
 
-        console.log(res)
+        return res.data.result.map((item: any) => ({
+            id: item.id,
+            title: item.location_name,
+            location: item.location,
+            type: item.location_type
+        } as SearchResult))
     } catch (e) {
-
+        return []
     }
 }
-
-// {
-//     "id": "54bf1572-f76e-4b2e-a869-a4bd628adcbc",
-//     "location_name": "Тут мой дом",
-//     "location": {
-//     "lat": 56.6,
-//         "lon": 84.85
-// },
-//     "location_type": "place"
-// },
 
 export const SearchNearby = async (dto: SearchNearbyDto): Promise<SearchResult[]> => {
     const params = new URLSearchParams({

@@ -1,24 +1,25 @@
 import React, { CSSProperties, useState } from 'react'
-import { MapContainer, Marker, TileLayer, useMapEvents } from 'react-leaflet'
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
+
+import { MeMarker, PlaceMarker, EventMarker } from './MapIcons'
 
 import { GeoPoint } from '../../misc/GeoPoint'
 import { SearchResult } from '../../api/search.api'
+import { ObjectType } from '../../api/const'
+
 
 type ClickableMapInfo = {
-    defaultCoord: GeoPoint;
+    defaultCoords: GeoPoint;
     handler: (point: GeoPoint) => void;
-
     selectedCoords?: GeoPoint;
-
     objects?: SearchResult[];
-
     style?: CSSProperties;
 };
 
 function ClickableMapComponent(props: ClickableMapInfo) {
-    const [initialPosition, ] = useState<GeoPoint>(props.defaultCoord)
+    const [initialPosition] = useState<GeoPoint>(props.defaultCoords)
     const [selectedPosition, setSelectedPosition] = useState<[number, number]>(
-        props.selectedCoords === undefined ? [props.defaultCoord.lat, props.defaultCoord.lon]
+        props.selectedCoords === undefined ? [props.defaultCoords.lat, props.defaultCoords.lon]
             : [props.selectedCoords.lat, props.selectedCoords.lon],
     )
 
@@ -27,7 +28,6 @@ function ClickableMapComponent(props: ClickableMapInfo) {
             click(e) {
                 const coords = e.latlng
                 props.handler({ lat: coords.lat, lon: coords.lng })
-                console.log(coords)
                 setSelectedPosition([
                     coords.lat,
                     coords.lng,
@@ -35,11 +35,15 @@ function ClickableMapComponent(props: ClickableMapInfo) {
             },
         })
 
-        return (selectedPosition ? <Marker
-            key={selectedPosition[0]}
-            position={selectedPosition}
-            interactive={false}
-        /> : null)
+        return (selectedPosition ?
+            <Marker
+                icon={MeMarker}
+                key={selectedPosition[0]}
+                position={selectedPosition}
+                interactive={true}
+            >
+
+            </Marker> : null)
     }
 
     return (
@@ -53,11 +57,37 @@ function ClickableMapComponent(props: ClickableMapInfo) {
 
             {
                 props.objects?.map(item => {
-                    return (<Marker
-                        key={`${item.location.lon}_${item.location.lat}`}
-                        position={[item.location.lat, item.location.lon]}
-                        interactive={false}
-                    />)
+                    return item.type === ObjectType.EVENT
+                        ?
+                        <Marker
+                            key={`${item.location.lon}_${item.location.lat}`}
+                            position={[item.location.lat, item.location.lon]}
+                            interactive={true}
+                            icon={EventMarker}
+                        >
+                            <Popup>
+                                Событие: {item.title}
+                                <br />
+                                <a style={{ cursor: 'pointer' }} onClick={() => window.open(`/${item.type}/${item.id}`, '_blank')}>
+                                    Перейти к объекту
+                                </a>
+                            </Popup>
+                        </Marker>
+                        :
+                        <Marker
+                            key={`${item.location.lon}_${item.location.lat}`}
+                            position={[item.location.lat, item.location.lon]}
+                            interactive={true}
+                            icon={PlaceMarker}
+                        >
+                            <Popup>
+                                Место: {item.title}
+                                <br />
+                                <a style={{ cursor: 'pointer' }} onClick={() => window.open(`/${item.type}/${item.id}`, '_blank')}>
+                                    Перейти к объекту
+                                </a>
+                            </Popup>
+                        </Marker>
                 })
             }
 

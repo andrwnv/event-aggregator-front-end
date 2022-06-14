@@ -9,20 +9,14 @@ import { ObjectType } from '../../api/const'
 
 import './SearchBar.css'
 
-type Item = {
-    type: ObjectType,
-    id: string
-}
-
 type SearchBarProps = {
-    foundItemsHandler: (items: Item[]) => void,
-    // types: string[],
+    searchValueCallback: (value: string) => void
+    searchClearedCallback: () => void
 }
 
 
-const SearchBar: React.FC<SearchBarProps> = ({foundItemsHandler}) => {
-
-    const [searchValue, setSearchValue] = useState<string>('')
+const SearchBar: React.FC<SearchBarProps> = ({searchValueCallback, searchClearedCallback}) => {
+    const [, setSearchValue] = useState<string>('')
     const [, setInputValue] = useState<string>('')
 
     const inputRef = useRef<HTMLInputElement | undefined>()
@@ -31,12 +25,14 @@ const SearchBar: React.FC<SearchBarProps> = ({foundItemsHandler}) => {
         if (inputRef.current !== undefined)
             inputRef.current!.value = ''
         setSearchValue('')
+
+        searchClearedCallback()
     }
 
     const debounceSearch = useCallback(debounce((str: string) => {
         setSearchValue(str)
-        console.log(str)
-    }, 1000), [])
+        searchValueCallback(str)
+    }, 700), [])
 
     const onChangeInput = (value: string) => {
         setInputValue(value)
@@ -45,7 +41,12 @@ const SearchBar: React.FC<SearchBarProps> = ({foundItemsHandler}) => {
 
     const SearchInputGroup = useCallback(() => (
         <InputGroup size={'lg'} inside>
-            <Input placeholder={'Введите что хотите найти...'} onChange={onChangeInput} inputRef={inputRef}/>
+            <Input placeholder={'Введите что хотите найти...'}
+                   onChange={onChangeInput}
+                   onPressEnter={() => {
+                       onChangeInput(inputRef.current!.value)
+                   }}
+                   inputRef={inputRef}/>
             <InputGroup.Button onClick={onSearchClear}>
                 <ClearIcon />
             </InputGroup.Button>
