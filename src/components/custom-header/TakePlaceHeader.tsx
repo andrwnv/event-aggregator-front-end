@@ -6,8 +6,9 @@ import CreateObjModal from '../create-object-modal/CreateObjModal'
 import { ReactComponent as Logo } from '../../misc/icons/logo.svg'
 import useAuth from '../../hooks/useAuth'
 
-import './TakePlaceHeader.css'
 import CreateHistoryModal from '../create-history-modal/CreateHistoryModal'
+
+import './TakePlaceHeader.css'
 
 export default function TakePlaceHeader() {
     const { user } = useAuth()
