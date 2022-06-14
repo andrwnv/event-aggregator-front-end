@@ -8,10 +8,6 @@ import { GetHistoryList, ShortHistoryInfo } from '../../api/history.api'
 
 import './HistoryListPage.css'
 
-function paginateArr(arr: any[], page: number, size: number): any[] {
-    return arr.slice((page - 1) * size, page * size)
-}
-
 const HistoryListPage: React.FC<any> = () => {
 
     const [historyList, setHistoryList] = useState<ShortHistoryInfo[]>()
@@ -27,7 +23,7 @@ const HistoryListPage: React.FC<any> = () => {
             setTotalListSize(result.totalSize)
             setHistoryList(result.list)
         })
-    }, [])
+    }, [activePage])
 
     return (
         <Container className={'main-page-root'}>
@@ -39,7 +35,7 @@ const HistoryListPage: React.FC<any> = () => {
                     colspan={20}
                 >
                     {
-                        historyList && paginateArr(historyList, activePage, 8).map(item => (
+                        historyList?.map(item => (
                             <HistoryCard
                                 id={item.id}
                                 title={item.title}
